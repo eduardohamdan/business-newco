@@ -7,13 +7,13 @@ export default defineConfig({
         test: {
           name: "unit",
           include: ["packages/**/*.test.ts", "apps/worker/**/*.test.ts", "evals/**/*.test.ts"],
-          exclude: ["packages/db/**", "**/node_modules/**"],
+          exclude: ["packages/db/**", "packages/services/**", "**/node_modules/**"],
         },
       },
       {
         test: {
           name: "db",
-          include: ["packages/db/**/*.test.ts"],
+          include: ["packages/db/**/*.test.ts", "packages/services/**/*.test.ts"],
           exclude: ["**/node_modules/**"],
           fileParallelism: false,
         },
