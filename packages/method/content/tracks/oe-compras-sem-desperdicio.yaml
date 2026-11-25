@@ -1,0 +1,45 @@
+code: oe-compras-sem-desperdicio
+version: 1
+title: "Compras e estoque sem desperdício"
+dimension: operacao_entrega
+stages: [sobrevivencia, organizacao, crescimento]
+tags: [operacao, margem, caixa]
+objective: "Comprar melhor e reduzir perdas, para baixar o custo variável."
+why: "Estoque parado é dinheiro parado. Perda e compra mal negociada comem a margem em silêncio."
+impact: 4
+effort: 3
+triggers:
+  - { signal: "metric:custo_variavel_pct", op: gt, value: 40, weight: 3 }
+  - { signal: "metric:folego_caixa_dias", op: lt, value: 30, weight: 1 }
+requires: { bank_statement: true, team_min: 1 }
+indicator:
+  metric: custo_variavel_pct
+  target: { type: delta, value: -3, min: 5 }
+milestones:
+  - code: m1
+    title: "Curva ABC das compras"
+    week: 2
+    evidence: "Lista dos 10 itens que representam a maior parte das compras."
+    actions:
+      - { title: "Listar no Raio-X os maiores fornecedores e itens comprados", week: 1, minutes: 30 }
+      - { title: "Identificar os 10 itens que mais pesam nas compras", week: 2, minutes: 30 }
+  - code: m2
+    title: "Cotação e negociação"
+    week: 5
+    evidence: "Três cotações para os 5 principais itens e uma negociação fechada."
+    actions:
+      - { title: "Pedir três cotações para os 5 principais itens", week: 3, minutes: 60, role: manager }
+      - { title: "Negociar preço ou prazo com o fornecedor principal", week: 5, minutes: 45 }
+  - code: m3
+    title: "Perdas registradas"
+    week: 8
+    evidence: "Perdas, vencimentos e quebras anotados por item."
+    actions:
+      - { title: "Registrar perdas e vencimentos por item toda semana", week: 6, minutes: 15, role: member }
+      - { title: "Definir estoque mínimo e máximo dos 10 itens principais", week: 8, minutes: 30 }
+  - code: m4
+    title: "Custo variável medido"
+    week: 12
+    evidence: "Custo variável sobre receita recalculado pelo Raio-X."
+    actions:
+      - { title: "Enviar o extrato do mês para recalcular o custo variável", week: 12, minutes: 10 }

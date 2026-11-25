@@ -1,0 +1,42 @@
+code: pl-contratar-certo
+version: 1
+title: "Contratar certo"
+dimension: pessoas_lideranca
+stages: [crescimento, escala]
+tags: [pessoas, contratacao]
+objective: "Contratar com perfil definido, entrevista estruturada e integração nos primeiros 30 dias."
+why: "Contratação errada custa meses de salário e energia da equipe."
+impact: 3
+effort: 3
+triggers:
+  - { signal: "metric:rotatividade_trimestral_pct", op: gt, value: 10, weight: 2 }
+  - { signal: "dimension:pessoas_lideranca", op: lt, value: 70, weight: 1 }
+requires: { bank_statement: false, team_min: 5 }
+indicator:
+  metric: rotatividade_trimestral_pct
+  target: { type: pct_change, value: -0.3 }
+milestones:
+  - code: m1
+    title: "Perfil da vaga"
+    week: 2
+    evidence: "Perfil com entregas esperadas, comportamentos e salário."
+    actions:
+      - { title: "Escrever o perfil da vaga a partir do papel definido", week: 2, minutes: 45 }
+  - code: m2
+    title: "Entrevista estruturada"
+    week: 4
+    evidence: "Roteiro com as mesmas perguntas para todos os candidatos."
+    actions:
+      - { title: "Montar o roteiro de entrevista com perguntas sobre situações reais", week: 3, minutes: 45 }
+  - code: m3
+    title: "Integração de 30 dias"
+    week: 8
+    evidence: "Plano de integração com metas para 7, 15 e 30 dias."
+    actions:
+      - { title: "Criar o plano de integração e o padrinho do novo colaborador", week: 6, minutes: 45 }
+  - code: m4
+    title: "Rotatividade medida"
+    week: 12
+    evidence: "Rotatividade do trimestre registrada."
+    actions:
+      - { title: "Registrar desligamentos e a rotatividade do trimestre", week: 12, minutes: 10 }

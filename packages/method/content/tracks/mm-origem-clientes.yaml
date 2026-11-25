@@ -1,0 +1,41 @@
+code: mm-origem-clientes
+version: 1
+title: "Saber de onde vem o cliente"
+dimension: marketing_marca
+stages: [organizacao, crescimento, escala]
+tags: [marketing, base]
+objective: "Registrar a origem de todo novo cliente para investir no que funciona."
+why: "Sem saber a origem, o investimento em marketing é um chute."
+impact: 3
+effort: 1
+triggers:
+  - { signal: "dimension:marketing_marca", op: lt, value: 45, weight: 2 }
+requires: { bank_statement: false, team_min: 1 }
+indicator:
+  metric: origem_registrada_pct
+  target: { type: absolute, value: 80 }
+milestones:
+  - code: m1
+    title: "Pergunta padrão"
+    week: 1
+    evidence: "Pergunta 'como nos conheceu?' incluída no atendimento."
+    actions:
+      - { title: "Incluir 'Como você conheceu a gente?' no atendimento e no cadastro", week: 1, minutes: 15 }
+  - code: m2
+    title: "Registro em uso"
+    week: 4
+    evidence: "Origem anotada em pelo menos 60% dos novos clientes."
+    actions:
+      - { title: "Anotar a origem de cada novo cliente numa lista única", week: 2, minutes: 10, role: member }
+  - code: m3
+    title: "Primeira leitura"
+    week: 8
+    evidence: "Ranking das origens com número de clientes e faturamento."
+    actions:
+      - { title: "Montar o ranking das origens e levar para a reunião", week: 8, minutes: 30 }
+  - code: m4
+    title: "Decisão de investimento"
+    week: 12
+    evidence: "Uma decisão registrada: reforçar a melhor origem e cortar a pior."
+    actions:
+      - { title: "Decidir onde colocar mais esforço e onde cortar", week: 12, minutes: 30 }

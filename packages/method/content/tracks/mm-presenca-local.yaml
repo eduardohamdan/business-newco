@@ -1,0 +1,43 @@
+code: mm-presenca-local
+version: 1
+title: "Presença local no Google"
+dimension: marketing_marca
+stages: [organizacao, crescimento]
+tags: [marketing]
+objective: "Ser encontrado por quem procura o seu serviço na região."
+why: "Quem procura no Google com intenção de compra está pronto para fechar. Perfil completo e avaliado gera contatos sem anúncio."
+impact: 3
+effort: 2
+triggers:
+  - { signal: "dimension:marketing_marca", op: lt, value: 50, weight: 2 }
+requires: { bank_statement: false, team_min: 1 }
+indicator:
+  metric: avaliacoes_publicas_mes
+  target: { type: absolute, value: 8 }
+milestones:
+  - code: m1
+    title: "Perfil completo"
+    week: 2
+    evidence: "Google Perfil da Empresa com fotos, horário, categoria, serviços e WhatsApp."
+    actions:
+      - { title: "Revisar e completar o Google Perfil da Empresa", week: 1, minutes: 60 }
+      - { title: "Publicar 10 fotos reais do negócio e da equipe", week: 2, minutes: 30 }
+  - code: m2
+    title: "Rotina de avaliações"
+    week: 4
+    evidence: "Pedido de avaliação incluído no pós-venda."
+    actions:
+      - { title: "Incluir o link de avaliação no pós-venda", week: 3, minutes: 15 }
+      - { title: "Responder todas as avaliações antigas", week: 4, minutes: 30 }
+  - code: m3
+    title: "Publicações semanais"
+    week: 8
+    evidence: "Uma publicação por semana no perfil, durante 4 semanas."
+    actions:
+      - { title: "Publicar uma novidade, oferta ou caso por semana no perfil", week: 6, minutes: 20, role: member }
+  - code: m4
+    title: "Avaliações medidas"
+    week: 12
+    evidence: "Número de avaliações novas no mês registrado."
+    actions:
+      - { title: "Registrar no ritual quantas avaliações novas entraram no mês", week: 12, minutes: 5 }

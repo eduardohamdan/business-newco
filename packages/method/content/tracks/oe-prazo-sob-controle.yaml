@@ -1,0 +1,42 @@
+code: oe-prazo-sob-controle
+version: 1
+title: "Prazo sob controle"
+dimension: operacao_entrega
+stages: [organizacao, crescimento]
+tags: [operacao]
+objective: "Entregar no prazo combinado e avisar o cliente antes de qualquer atraso."
+why: "Atraso destrói confiança e indicação. Prazo cumprido é a promessa mais simples de marca."
+impact: 3
+effort: 2
+triggers:
+  - { signal: "dimension:operacao_entrega", op: lt, value: 60, weight: 2 }
+requires: { bank_statement: false, team_min: 1 }
+indicator:
+  metric: entregas_no_prazo_pct
+  target: { type: absolute, value: 90 }
+milestones:
+  - code: m1
+    title: "Quadro de entregas"
+    week: 2
+    evidence: "Quadro único com todas as entregas em andamento e as datas prometidas."
+    actions:
+      - { title: "Montar o quadro de entregas (a fazer, fazendo, entregue) com as datas", week: 1, minutes: 45 }
+      - { title: "Revisar o quadro todo dia em 10 minutos", week: 2, minutes: 10, role: manager }
+  - code: m2
+    title: "Prazo realista"
+    week: 4
+    evidence: "Prazo padrão recalculado com base no tempo real das últimas entregas."
+    actions:
+      - { title: "Medir o tempo real das últimas 10 entregas e ajustar o prazo padrão", week: 3, minutes: 30 }
+  - code: m3
+    title: "Aviso antecipado"
+    week: 6
+    evidence: "Regra ativa: risco de atraso é avisado ao cliente com 48 horas de antecedência."
+    actions:
+      - { title: "Combinar com a equipe a regra de aviso antecipado", week: 5, minutes: 20 }
+  - code: m4
+    title: "Pontualidade medida"
+    week: 12
+    evidence: "Percentual de entregas no prazo registrado no mês."
+    actions:
+      - { title: "Registrar o percentual de entregas no prazo", week: 12, minutes: 15 }

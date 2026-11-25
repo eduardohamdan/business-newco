@@ -1,0 +1,43 @@
+code: mm-conteudo-que-vende
+version: 1
+title: "Conteúdo que vende"
+dimension: marketing_marca
+stages: [organizacao, crescimento, escala]
+tags: [marketing]
+objective: "Publicar com regularidade conteúdo que mostra resultado, bastidores e prova social."
+why: "Constância e prova social geram confiança. Para quem está decidindo, isso vale mais que anúncio."
+impact: 3
+effort: 3
+triggers:
+  - { signal: "dimension:marketing_marca", op: lt, value: 65, weight: 1 }
+  - { signal: "metric:concentracao_receita_pct", op: gt, value: 30, weight: 1 }
+requires: { bank_statement: false, team_min: 1 }
+indicator:
+  metric: leads_semana
+  target: { type: pct_change, value: 0.2, min: 5 }
+milestones:
+  - code: m1
+    title: "Linha editorial"
+    week: 2
+    evidence: "Três temas fixos definidos: resultado de cliente, bastidor e dúvida frequente."
+    actions:
+      - { title: "Listar as 10 perguntas que os clientes mais fazem", week: 1, minutes: 30 }
+      - { title: "Definir os 3 temas fixos e o dia de cada publicação", week: 2, minutes: 20 }
+  - code: m2
+    title: "Banco de conteúdo"
+    week: 4
+    evidence: "Duas semanas de publicações prontas com antecedência."
+    actions:
+      - { title: "Produzir 6 publicações em um único bloco de tempo", week: 3, minutes: 120, role: member }
+  - code: m3
+    title: "Constância"
+    week: 9
+    evidence: "Seis semanas seguidas com 3 publicações por semana."
+    actions:
+      - { title: "Publicar conforme o calendário e responder comentários no mesmo dia", week: 5, minutes: 20, role: member }
+  - code: m4
+    title: "Leads medidos"
+    week: 12
+    evidence: "Leads vindos de redes anotados no ritual."
+    actions:
+      - { title: "Registrar no ritual quantos contatos vieram das redes", week: 12, minutes: 5 }

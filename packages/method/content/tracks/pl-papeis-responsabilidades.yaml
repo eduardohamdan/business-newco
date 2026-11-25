@@ -1,0 +1,45 @@
+code: pl-papeis-responsabilidades
+version: 1
+title: "Papéis e responsabilidades"
+dimension: pessoas_lideranca
+stages: [organizacao, crescimento, escala]
+tags: [pessoas, base]
+objective: "Escrever o que é de cada pessoa, incluindo o dono."
+why: "Quando todo mundo faz tudo, ninguém é dono de nada e tudo volta para o dono."
+impact: 4
+effort: 2
+triggers:
+  - { signal: "dimension:pessoas_lideranca", op: lt, value: 55, weight: 2 }
+requires: { bank_statement: false, team_min: 2 }
+indicator:
+  metric: papeis_definidos_pct
+  target: { type: absolute, value: 100 }
+milestones:
+  - code: m1
+    title: "Mapa de atividades"
+    week: 2
+    evidence: "Lista de todas as atividades recorrentes da empresa."
+    actions:
+      - { title: "Listar as atividades recorrentes da empresa (diárias, semanais e mensais)", week: 1, minutes: 45 }
+      - { title: "Marcar quem faz cada uma hoje", week: 2, minutes: 30 }
+  - code: m2
+    title: "Matriz de papéis"
+    week: 4
+    evidence: "Cada atividade com um único responsável."
+    actions:
+      - { title: "Definir um único responsável por atividade", week: 3, minutes: 45 }
+      - { title: "Escrever o papel de cada pessoa em meia página", week: 4, minutes: 60 }
+  - code: m3
+    title: "Combinado com a equipe"
+    week: 6
+    evidence: "Papéis apresentados e aceitos por todas as pessoas."
+    actions:
+      - { title: "Conversar individualmente com cada pessoa sobre o papel dela", week: 5, minutes: 90 }
+      - { title: "Publicar a matriz num lugar visível", week: 6, minutes: 10 }
+  - code: m4
+    title: "Papéis revisados"
+    week: 12
+    evidence: "Revisão feita após 30 dias de uso."
+    actions:
+      - { title: "Revisar os papéis na reunião semanal e ajustar o que não funcionou", week: 10, minutes: 30 }
+      - { title: "Registrar o percentual da equipe com papel escrito", week: 12, minutes: 5 }

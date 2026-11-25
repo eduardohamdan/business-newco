@@ -1,0 +1,49 @@
+code: cf-cobranca
+version: 1
+title: "Cobrança sem constrangimento"
+dimension: caixa_financas
+stages: [sobrevivencia, organizacao, crescimento]
+tags: [caixa]
+objective: "Reduzir a inadimplência com uma rotina simples de lembrete e cobrança."
+why: "Dinheiro vendido e não recebido é o capital de giro mais barato que existe."
+impact: 4
+effort: 2
+triggers:
+  - { signal: "metric:inadimplencia_pct", op: gt, value: 5, weight: 3 }
+  - { signal: "metric:folego_caixa_dias", op: lt, value: 30, weight: 1 }
+requires: { bank_statement: false, team_min: 1 }
+indicator:
+  metric: inadimplencia_pct
+  target: { type: pct_change, value: -0.3, min: 2 }
+milestones:
+  - code: m1
+    title: "Lista de devedores"
+    week: 1
+    evidence: "Planilha com cliente, valor, vencimento e dias de atraso."
+    actions:
+      - { title: "Listar todos os valores vencidos com cliente, valor e data", week: 1, minutes: 45 }
+  - code: m2
+    title: "Régua de cobrança ativa"
+    week: 3
+    evidence: "Mensagens de lembrete (antes do vencimento) e cobrança (1, 7 e 15 dias) em uso."
+    actions:
+      - { title: "Configurar lembrete 2 dias antes do vencimento", week: 2, minutes: 30 }
+      - { title: "Enviar a mensagem de cobrança para os atrasados da lista", week: 3, minutes: 45, role: manager }
+  - code: m3
+    title: "Política de crédito"
+    week: 6
+    evidence: "Regras escritas de quando vender a prazo, entrada mínima e bloqueio por atraso."
+    actions:
+      - { title: "Escrever as regras de venda a prazo (quem pode, quanto, entrada)", week: 5, minutes: 30 }
+      - { title: "Oferecer Pix ou cartão como padrão nas novas vendas", week: 6, minutes: 20 }
+  - code: m4
+    title: "Inadimplência medida"
+    week: 12
+    evidence: "Inadimplência do mês registrada e abaixo da meta."
+    actions:
+      - { title: "Registrar a inadimplência do mês no painel", week: 10, minutes: 15 }
+      - { title: "Negociar os casos acima de 60 dias", week: 12, minutes: 45 }
+templates:
+  - title: "Mensagem de cobrança (7 dias)"
+    kind: script
+    body: "Oi, {nome}, tudo bem? Notei que o pagamento de {valor}, com vencimento em {data}, ainda está em aberto. Posso te mandar o Pix ou o boleto atualizado?"

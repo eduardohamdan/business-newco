@@ -1,0 +1,42 @@
+code: df-direcao-em-uma-pagina
+version: 1
+title: "Direção em uma página"
+dimension: direcao_foco
+stages: [organizacao, crescimento, escala]
+tags: [direcao]
+objective: "Escrever, em uma página, onde a empresa quer estar em 12 meses, com metas e três apostas."
+why: "Sem direção, cada oportunidade parece prioridade. Com direção, fica fácil dizer não."
+impact: 3
+effort: 2
+triggers:
+  - { signal: "dimension:direcao_foco", op: lt, value: 50, weight: 2 }
+  - { signal: "maturity:avg", op: gte, value: 45, weight: 1 }
+requires: { bank_statement: false, team_min: 1 }
+indicator:
+  metric: direcao_definida_pct
+  target: { type: absolute, value: 100 }
+milestones:
+  - code: m1
+    title: "Onde queremos chegar"
+    week: 2
+    evidence: "Visão de 12 meses com faturamento, lucro e tamanho de equipe."
+    actions:
+      - { title: "Responder: como estará a empresa daqui a 12 meses, em números?", week: 1, minutes: 45 }
+  - code: m2
+    title: "Três apostas"
+    week: 4
+    evidence: "Três apostas do ano e o que a empresa não vai fazer."
+    actions:
+      - { title: "Escolher as 3 apostas do ano e 3 coisas que a empresa não vai fazer", week: 3, minutes: 45 }
+  - code: m3
+    title: "Página compartilhada"
+    week: 6
+    evidence: "Página apresentada para a equipe ou os sócios."
+    actions:
+      - { title: "Apresentar a página para a equipe ou os sócios", week: 6, minutes: 45 }
+  - code: m4
+    title: "Página conectada ao ciclo"
+    week: 12
+    evidence: "Prioridades do próximo ciclo escolhidas a partir das apostas."
+    actions:
+      - { title: "Usar as apostas para escolher as prioridades do próximo ciclo", week: 12, minutes: 30 }

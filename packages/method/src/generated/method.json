@@ -1,0 +1,4249 @@
+{
+  "manifest": {
+    "version": "2026.11-v0",
+    "name": "Método de Evolução Empresarial",
+    "stages": [
+      {
+        "code": "sobrevivencia",
+        "order": 1,
+        "name": "Sobrevivência",
+        "description": "O caixa manda na empresa. Falta previsibilidade e as contas pessoais se misturam com as da empresa.",
+        "focus": "Caixa, preço, cobrança e separação PF/PJ.",
+        "rule": {
+          "mode": "any",
+          "conditions": [
+            {
+              "signal": "metric:folego_caixa_dias",
+              "op": "lt",
+              "value": 15
+            },
+            {
+              "signal": "metric:meses_caixa_negativo",
+              "op": "gte",
+              "value": 2
+            },
+            {
+              "signal": "metric:despesas_pessoais_pj_pct",
+              "op": "gt",
+              "value": 10
+            },
+            {
+              "signal": "dimension:caixa_financas",
+              "op": "lt",
+              "value": 35
+            }
+          ]
+        },
+        "blocked_track_tags": [
+          "expansao",
+          "contratacao"
+        ]
+      },
+      {
+        "code": "organizacao",
+        "order": 2,
+        "name": "Organização",
+        "description": "O caixa está estável, mas tudo depende do dono. Faltam rotina, metas e processo.",
+        "focus": "Rotina comercial, processo do serviço principal e metas.",
+        "rule": {
+          "mode": "any",
+          "conditions": [
+            {
+              "signal": "maturity:avg",
+              "op": "lt",
+              "value": 50
+            },
+            {
+              "signal": "dimension:direcao_foco",
+              "op": "lt",
+              "value": 45
+            },
+            {
+              "signal": "dimension:pessoas_lideranca",
+              "op": "lt",
+              "value": 40
+            }
+          ]
+        },
+        "blocked_track_tags": [
+          "expansao"
+        ]
+      },
+      {
+        "code": "crescimento",
+        "order": 3,
+        "name": "Crescimento",
+        "description": "Existe demanda consistente. O gargalo é capacidade, time ou margem.",
+        "focus": "Vendas previsíveis, margem, papéis e contratação.",
+        "rule": {
+          "mode": "any",
+          "conditions": [
+            {
+              "signal": "maturity:avg",
+              "op": "lt",
+              "value": 72
+            }
+          ]
+        },
+        "blocked_track_tags": []
+      },
+      {
+        "code": "escala",
+        "order": 4,
+        "name": "Escala",
+        "description": "A empresa é gerida por indicadores e tem liderança intermediária.",
+        "focus": "Delegação, governança e novos canais.",
+        "blocked_track_tags": []
+      }
+    ],
+    "dimensions": [
+      {
+        "code": "caixa_financas",
+        "name": "Caixa e Finanças",
+        "question": "O dinheiro sobra, e eu sei por quê?",
+        "weight": 1.3
+      },
+      {
+        "code": "vendas_clientes",
+        "name": "Vendas e Clientes",
+        "question": "Eu vendo com previsibilidade?",
+        "weight": 1.2
+      },
+      {
+        "code": "marketing_marca",
+        "name": "Marketing e Marca",
+        "question": "As pessoas certas me encontram?",
+        "weight": 0.8
+      },
+      {
+        "code": "operacao_entrega",
+        "name": "Operação e Entrega",
+        "question": "Eu entrego com qualidade sem depender de mim?",
+        "weight": 1
+      },
+      {
+        "code": "pessoas_lideranca",
+        "name": "Pessoas e Liderança",
+        "question": "Cada um sabe o que é seu?",
+        "weight": 0.9
+      },
+      {
+        "code": "direcao_foco",
+        "name": "Direção e Foco",
+        "question": "Eu sei para onde estou indo?",
+        "weight": 0.8
+      }
+    ],
+    "limits": {
+      "max_priorities": 3,
+      "max_priorities_per_dimension": 2,
+      "min_coverage_for_diagnosis": 0.6,
+      "confidence_high": 0.8,
+      "confidence_moderate": 0.65,
+      "cycle_weeks": 13
+    }
+  },
+  "metrics": [
+    {
+      "code": "folego_caixa_dias",
+      "name": "Fôlego de caixa",
+      "unit": "dias",
+      "direction": "up",
+      "dimension": "caixa_financas",
+      "source": "raiox",
+      "periodicity": "monthly",
+      "description": "Quantos dias a empresa opera com o saldo atual, considerando a média de saídas.",
+      "tolerance": 5
+    },
+    {
+      "code": "meses_caixa_negativo",
+      "name": "Meses com caixa negativo",
+      "unit": "count",
+      "direction": "down",
+      "dimension": "caixa_financas",
+      "source": "raiox",
+      "periodicity": "monthly",
+      "description": "Meses, dos últimos 3, em que as saídas superaram as entradas.",
+      "tolerance": 0
+    },
+    {
+      "code": "despesas_pessoais_pj_pct",
+      "name": "Despesas pessoais na conta PJ",
+      "unit": "pct",
+      "direction": "down",
+      "dimension": "caixa_financas",
+      "source": "raiox",
+      "periodicity": "monthly",
+      "description": "Percentual das saídas da conta PJ com indício de gasto pessoal.",
+      "tolerance": 2
+    },
+    {
+      "code": "margem_bruta_pct",
+      "name": "Margem bruta",
+      "unit": "pct",
+      "direction": "up",
+      "dimension": "caixa_financas",
+      "source": "manual",
+      "periodicity": "monthly",
+      "description": "(Receita - custos variáveis) / receita.",
+      "tolerance": 2
+    },
+    {
+      "code": "inadimplencia_pct",
+      "name": "Inadimplência",
+      "unit": "pct",
+      "direction": "down",
+      "dimension": "caixa_financas",
+      "source": "manual",
+      "periodicity": "monthly",
+      "description": "Valor vencido e não recebido / valor faturado no mês.",
+      "tolerance": 2
+    },
+    {
+      "code": "tarifas_bancarias_pct",
+      "name": "Tarifas e juros bancários",
+      "unit": "pct",
+      "direction": "down",
+      "dimension": "caixa_financas",
+      "source": "raiox",
+      "periodicity": "monthly",
+      "description": "Tarifas, IOF e juros / entradas.",
+      "tolerance": 0.5
+    },
+    {
+      "code": "concentracao_receita_pct",
+      "name": "Concentração de receita",
+      "unit": "pct",
+      "direction": "down",
+      "dimension": "vendas_clientes",
+      "source": "raiox",
+      "periodicity": "monthly",
+      "description": "Participação do maior pagador nas entradas.",
+      "tolerance": 5
+    },
+    {
+      "code": "faturamento_mensal",
+      "name": "Faturamento mensal",
+      "unit": "brl_cents",
+      "direction": "up",
+      "dimension": "vendas_clientes",
+      "source": "raiox",
+      "periodicity": "monthly",
+      "description": "Entradas operacionais do mês (exclui transferências e empréstimos).",
+      "tolerance": 0
+    },
+    {
+      "code": "ticket_medio",
+      "name": "Ticket médio",
+      "unit": "brl_cents",
+      "direction": "up",
+      "dimension": "vendas_clientes",
+      "source": "manual",
+      "periodicity": "monthly",
+      "description": "Faturamento / número de vendas.",
+      "tolerance": 0
+    },
+    {
+      "code": "contatos_comerciais_semana",
+      "name": "Contatos comerciais por semana",
+      "unit": "count",
+      "direction": "up",
+      "dimension": "vendas_clientes",
+      "source": "ritual",
+      "periodicity": "weekly",
+      "description": "Ligações, mensagens e visitas ativas a potenciais clientes.",
+      "tolerance": 2
+    },
+    {
+      "code": "clientes_reativados_mes",
+      "name": "Clientes reativados",
+      "unit": "count",
+      "direction": "up",
+      "dimension": "vendas_clientes",
+      "source": "ritual",
+      "periodicity": "monthly",
+      "description": "Clientes inativos há 90+ dias que voltaram a comprar.",
+      "tolerance": 1
+    },
+    {
+      "code": "clientes_indicacao_mes",
+      "name": "Clientes por indicação",
+      "unit": "count",
+      "direction": "up",
+      "dimension": "vendas_clientes",
+      "source": "ritual",
+      "periodicity": "monthly",
+      "description": "Novos clientes vindos de indicação.",
+      "tolerance": 1
+    },
+    {
+      "code": "conversao_whatsapp_pct",
+      "name": "Conversão no WhatsApp",
+      "unit": "pct",
+      "direction": "up",
+      "dimension": "marketing_marca",
+      "source": "manual",
+      "periodicity": "monthly",
+      "description": "Conversas comerciais que viraram venda.",
+      "tolerance": 2
+    },
+    {
+      "code": "leads_semana",
+      "name": "Leads por semana",
+      "unit": "count",
+      "direction": "up",
+      "dimension": "marketing_marca",
+      "source": "ritual",
+      "periodicity": "weekly",
+      "description": "Novos contatos interessados por semana.",
+      "tolerance": 2
+    },
+    {
+      "code": "origem_registrada_pct",
+      "name": "Clientes com origem registrada",
+      "unit": "pct",
+      "direction": "up",
+      "dimension": "marketing_marca",
+      "source": "manual",
+      "periodicity": "monthly",
+      "description": "Percentual de novos clientes com a origem anotada.",
+      "tolerance": 5
+    },
+    {
+      "code": "avaliacoes_publicas_mes",
+      "name": "Avaliações públicas no mês",
+      "unit": "count",
+      "direction": "up",
+      "dimension": "marketing_marca",
+      "source": "ritual",
+      "periodicity": "monthly",
+      "description": "Novas avaliações no Google ou redes.",
+      "tolerance": 1
+    },
+    {
+      "code": "retrabalho_mes",
+      "name": "Retrabalhos no mês",
+      "unit": "count",
+      "direction": "down",
+      "dimension": "operacao_entrega",
+      "source": "ritual",
+      "periodicity": "monthly",
+      "description": "Entregas refeitas ou corrigidas.",
+      "tolerance": 1
+    },
+    {
+      "code": "entregas_no_prazo_pct",
+      "name": "Entregas no prazo",
+      "unit": "pct",
+      "direction": "up",
+      "dimension": "operacao_entrega",
+      "source": "manual",
+      "periodicity": "monthly",
+      "description": "Pedidos ou serviços entregues no prazo combinado.",
+      "tolerance": 3
+    },
+    {
+      "code": "reclamacoes_mes",
+      "name": "Reclamações no mês",
+      "unit": "count",
+      "direction": "down",
+      "dimension": "operacao_entrega",
+      "source": "ritual",
+      "periodicity": "monthly",
+      "description": "Reclamações registradas de clientes.",
+      "tolerance": 1
+    },
+    {
+      "code": "custo_variavel_pct",
+      "name": "Custo variável sobre receita",
+      "unit": "pct",
+      "direction": "down",
+      "dimension": "operacao_entrega",
+      "source": "raiox",
+      "periodicity": "monthly",
+      "description": "Compras e insumos / entradas.",
+      "tolerance": 2
+    },
+    {
+      "code": "papeis_definidos_pct",
+      "name": "Pessoas com papel definido",
+      "unit": "pct",
+      "direction": "up",
+      "dimension": "pessoas_lideranca",
+      "source": "manual",
+      "periodicity": "cycle",
+      "description": "Percentual da equipe com responsabilidades escritas.",
+      "tolerance": 0
+    },
+    {
+      "code": "reunioes_realizadas_pct",
+      "name": "Reuniões semanais realizadas",
+      "unit": "pct",
+      "direction": "up",
+      "dimension": "pessoas_lideranca",
+      "source": "ritual",
+      "periodicity": "monthly",
+      "description": "Reuniões feitas / previstas.",
+      "tolerance": 10
+    },
+    {
+      "code": "horas_operacionais_dono_semana",
+      "name": "Horas operacionais do dono",
+      "unit": "hours",
+      "direction": "down",
+      "dimension": "pessoas_lideranca",
+      "source": "ritual",
+      "periodicity": "weekly",
+      "description": "Horas por semana que o dono passa executando tarefas operacionais.",
+      "tolerance": 2
+    },
+    {
+      "code": "rotatividade_trimestral_pct",
+      "name": "Rotatividade no trimestre",
+      "unit": "pct",
+      "direction": "down",
+      "dimension": "pessoas_lideranca",
+      "source": "manual",
+      "periodicity": "cycle",
+      "description": "Desligamentos / equipe média no trimestre.",
+      "tolerance": 2
+    },
+    {
+      "code": "equipe_com_meta_pct",
+      "name": "Equipe com meta",
+      "unit": "pct",
+      "direction": "up",
+      "dimension": "direcao_foco",
+      "source": "manual",
+      "periodicity": "monthly",
+      "description": "Pessoas com meta mensal acompanhada.",
+      "tolerance": 0
+    },
+    {
+      "code": "indicadores_atualizados_pct",
+      "name": "Indicadores atualizados",
+      "unit": "pct",
+      "direction": "up",
+      "dimension": "direcao_foco",
+      "source": "system",
+      "periodicity": "weekly",
+      "description": "Indicadores do painel atualizados na semana.",
+      "tolerance": 10
+    },
+    {
+      "code": "direcao_definida_pct",
+      "name": "Direção em uma página",
+      "unit": "pct",
+      "direction": "up",
+      "dimension": "direcao_foco",
+      "source": "manual",
+      "periodicity": "cycle",
+      "description": "Itens do plano de uma página concluídos (visão, metas, apostas, números).",
+      "tolerance": 0
+    },
+    {
+      "code": "reunioes_socios_pct",
+      "name": "Reuniões de sócios realizadas",
+      "unit": "pct",
+      "direction": "up",
+      "dimension": "direcao_foco",
+      "source": "ritual",
+      "periodicity": "cycle",
+      "description": "Reuniões mensais de resultado entre sócios realizadas / previstas.",
+      "tolerance": 0
+    },
+    {
+      "code": "rituais_realizados_pct",
+      "name": "Rituais semanais realizados",
+      "unit": "pct",
+      "direction": "up",
+      "dimension": "direcao_foco",
+      "source": "system",
+      "periodicity": "monthly",
+      "description": "Rituais respondidos / enviados.",
+      "tolerance": 10
+    }
+  ],
+  "categories": [
+    {
+      "code": "receita_vendas",
+      "name": "Receita de vendas",
+      "group": "receita",
+      "direction": "inflow",
+      "keywords": [
+        "PIX RECEBIDO",
+        "PIX REC",
+        "TED RECEBIDA",
+        "DOC RECEBIDO",
+        "RECEBIMENTO",
+        "DEPOSITO",
+        "CREDITO VENDA",
+        "LIQUIDACAO BOLETO",
+        "BOLETO RECEBIDO",
+        "COBRANCA"
+      ],
+      "priority": 1
+    },
+    {
+      "code": "receita_cartoes",
+      "name": "Recebíveis de cartão",
+      "group": "receita",
+      "direction": "inflow",
+      "keywords": [
+        "CIELO",
+        "REDE ",
+        "STONE",
+        "GETNET",
+        "PAGSEGURO",
+        "PAGBANK",
+        "MERCADO PAGO",
+        "MERCADOPAGO",
+        "SUMUP",
+        "SAFRAPAY",
+        "INFINITEPAY",
+        "ANTECIPACAO"
+      ],
+      "priority": 3
+    },
+    {
+      "code": "emprestimos_recebidos",
+      "name": "Empréstimos e aportes recebidos",
+      "group": "financeiro",
+      "direction": "inflow",
+      "keywords": [
+        "EMPRESTIMO",
+        "CREDITO PESSOAL",
+        "CAPITAL DE GIRO",
+        "PRONAMPE",
+        "FINANCIAMENTO",
+        "APORTE"
+      ],
+      "priority": 4
+    },
+    {
+      "code": "rendimentos",
+      "name": "Rendimentos de aplicação",
+      "group": "financeiro",
+      "direction": "inflow",
+      "keywords": [
+        "RENDIMENTO",
+        "RESGATE",
+        "REND PAGO",
+        "CDB"
+      ],
+      "priority": 4
+    },
+    {
+      "code": "estornos",
+      "name": "Estornos e devoluções",
+      "group": "outros",
+      "direction": "inflow",
+      "keywords": [
+        "ESTORNO",
+        "DEVOLUCAO",
+        "DEVOL PIX"
+      ],
+      "priority": 4
+    },
+    {
+      "code": "fornecedores",
+      "name": "Fornecedores e insumos",
+      "group": "custo_variavel",
+      "direction": "outflow",
+      "keywords": [
+        "FORNECEDOR",
+        "DISTRIBUIDORA",
+        "ATACADO",
+        "ATACADAO",
+        "ASSAI",
+        "MAKRO",
+        "INSUMO",
+        "MATERIA PRIMA",
+        "COMPRA"
+      ],
+      "priority": 1
+    },
+    {
+      "code": "frete_logistica",
+      "name": "Frete e logística",
+      "group": "custo_variavel",
+      "direction": "outflow",
+      "keywords": [
+        "FRETE",
+        "CORREIOS",
+        "TRANSPORTADORA",
+        "LOGGI",
+        "JADLOG",
+        "LALAMOVE",
+        "UBER FLASH",
+        "MOTOBOY"
+      ],
+      "priority": 3
+    },
+    {
+      "code": "taxas_maquininha",
+      "name": "Taxas de maquininha e plataformas",
+      "group": "custo_variavel",
+      "direction": "outflow",
+      "keywords": [
+        "TAXA MDR",
+        "TAXA CARTAO",
+        "IFOOD TAXA",
+        "COMISSAO PLATAFORMA",
+        "MARKETPLACE"
+      ],
+      "priority": 3
+    },
+    {
+      "code": "folha_pagamento",
+      "name": "Folha e salários",
+      "group": "folha",
+      "direction": "outflow",
+      "keywords": [
+        "FOLHA",
+        "SALARIO",
+        "PAGTO SALARIO",
+        "PAGAMENTO FUNC",
+        "13 SALARIO",
+        "FERIAS",
+        "RESCISAO",
+        "VALE TRANSPORTE",
+        "VALE REFEICAO",
+        "VR BENEFICIOS",
+        "ALELO",
+        "SODEXO",
+        "TICKET SERVICOS"
+      ],
+      "priority": 3
+    },
+    {
+      "code": "encargos_trabalhistas",
+      "name": "Encargos trabalhistas",
+      "group": "folha",
+      "direction": "outflow",
+      "keywords": [
+        "FGTS",
+        "INSS",
+        "GPS",
+        "ESOCIAL",
+        "DCTFWEB"
+      ],
+      "priority": 4
+    },
+    {
+      "code": "pro_labore",
+      "name": "Pró-labore e retiradas",
+      "group": "retirada_socios",
+      "direction": "outflow",
+      "keywords": [
+        "PRO LABORE",
+        "PROLABORE",
+        "RETIRADA",
+        "DISTRIBUICAO LUCRO",
+        "LUCROS"
+      ],
+      "priority": 3
+    },
+    {
+      "code": "impostos",
+      "name": "Impostos e tributos",
+      "group": "impostos",
+      "direction": "outflow",
+      "keywords": [
+        "DAS ",
+        "SIMPLES NACIONAL",
+        "DARF",
+        "ICMS",
+        "ISS",
+        "ISSQN",
+        "IPTU",
+        "IPVA",
+        "TRIBUTO",
+        "SEFAZ",
+        "RECEITA FEDERAL",
+        "PGFN"
+      ],
+      "priority": 4
+    },
+    {
+      "code": "aluguel_condominio",
+      "name": "Aluguel e condomínio",
+      "group": "despesa_fixa",
+      "direction": "outflow",
+      "keywords": [
+        "ALUGUEL",
+        "LOCACAO",
+        "IMOBILIARIA",
+        "CONDOMINIO"
+      ],
+      "priority": 3
+    },
+    {
+      "code": "energia_agua_telefone",
+      "name": "Energia, água, internet e telefone",
+      "group": "despesa_fixa",
+      "direction": "outflow",
+      "keywords": [
+        "ENERGIA",
+        "ENEL",
+        "COELCE",
+        "CEMIG",
+        "COPEL",
+        "CELPE",
+        "COSERN",
+        "EQUATORIAL",
+        "NEOENERGIA",
+        "AGUA",
+        "CAGECE",
+        "SABESP",
+        "COMPESA",
+        "EMBASA",
+        "INTERNET",
+        "VIVO",
+        "CLARO",
+        "TIM ",
+        "OI ",
+        "TELEFONE"
+      ],
+      "priority": 3
+    },
+    {
+      "code": "contabilidade_servicos",
+      "name": "Contabilidade e serviços profissionais",
+      "group": "despesa_fixa",
+      "direction": "outflow",
+      "keywords": [
+        "CONTABIL",
+        "CONTABILIDADE",
+        "ESCRITORIO",
+        "HONORARIO",
+        "ADVOCACIA",
+        "CONSULTORIA"
+      ],
+      "priority": 3
+    },
+    {
+      "code": "software_assinaturas",
+      "name": "Softwares e assinaturas da empresa",
+      "group": "despesa_fixa",
+      "direction": "outflow",
+      "keywords": [
+        "GOOGLE WORKSPACE",
+        "MICROSOFT",
+        "CONTA AZUL",
+        "OMIE",
+        "BLING",
+        "TINY",
+        "RD STATION",
+        "CANVA",
+        "ADOBE",
+        "ZOOM",
+        "HOSTINGER",
+        "LOCAWEB"
+      ],
+      "priority": 2
+    },
+    {
+      "code": "marketing_anuncios",
+      "name": "Marketing e anúncios",
+      "group": "despesa_fixa",
+      "direction": "outflow",
+      "keywords": [
+        "FACEBOOK",
+        "FACEBK",
+        "META ADS",
+        "GOOGLE ADS",
+        "GOOGLE *ADS",
+        "INSTAGRAM",
+        "TIKTOK ADS",
+        "AGENCIA",
+        "PANFLETO",
+        "GRAFICA"
+      ],
+      "priority": 3
+    },
+    {
+      "code": "manutencao_operacao",
+      "name": "Manutenção e operação",
+      "group": "despesa_fixa",
+      "direction": "outflow",
+      "keywords": [
+        "MANUTENCAO",
+        "LIMPEZA",
+        "MATERIAL DE ESCRITORIO",
+        "PAPELARIA",
+        "DEDETIZACAO",
+        "SEGURANCA"
+      ],
+      "priority": 1
+    },
+    {
+      "code": "tarifas_bancarias",
+      "name": "Tarifas bancárias",
+      "group": "financeiro",
+      "direction": "outflow",
+      "keywords": [
+        "TARIFA",
+        "TAR ",
+        "CESTA",
+        "PACOTE SERVICOS",
+        "IOF",
+        "ANUIDADE",
+        "MANUTENCAO CONTA",
+        "TAXA TED",
+        "TAXA PIX"
+      ],
+      "priority": 5
+    },
+    {
+      "code": "juros_emprestimos",
+      "name": "Juros e parcelas de empréstimo",
+      "group": "financeiro",
+      "direction": "outflow",
+      "keywords": [
+        "JUROS",
+        "PARCELA EMPRESTIMO",
+        "PARC EMPREST",
+        "AMORTIZACAO",
+        "ENCARGOS",
+        "CHEQUE ESPECIAL",
+        "MORA"
+      ],
+      "priority": 5
+    },
+    {
+      "code": "investimentos_aplicacoes",
+      "name": "Aplicações financeiras",
+      "group": "investimento",
+      "direction": "outflow",
+      "keywords": [
+        "APLICACAO",
+        "APLIC ",
+        "INVESTIMENTO",
+        "CDB APLIC",
+        "POUPANCA"
+      ],
+      "priority": 4
+    },
+    {
+      "code": "equipamentos",
+      "name": "Equipamentos e melhorias",
+      "group": "investimento",
+      "direction": "outflow",
+      "keywords": [
+        "EQUIPAMENTO",
+        "MOVEIS",
+        "REFORMA",
+        "MAQUINA",
+        "COMPUTADOR",
+        "NOTEBOOK"
+      ],
+      "priority": 2
+    },
+    {
+      "code": "transferencia_mesma_titularidade",
+      "name": "Transferência entre contas da empresa",
+      "group": "transferencia_interna",
+      "direction": "both",
+      "keywords": [
+        "MESMA TITULARIDADE",
+        "TRANSF ENTRE CONTAS",
+        "TRANSFERENCIA ENTRE CONTAS",
+        "CONTA PROPRIA"
+      ],
+      "priority": 6
+    },
+    {
+      "code": "gastos_pessoais_suspeitos",
+      "name": "Possível gasto pessoal",
+      "group": "pessoal_suspeito",
+      "direction": "outflow",
+      "keywords": [
+        "NETFLIX",
+        "SPOTIFY",
+        "DISNEY",
+        "AMAZON PRIME",
+        "HBO",
+        "GLOBOPLAY",
+        "FARMACIA",
+        "DROGARIA",
+        "DROGASIL",
+        "PAGUE MENOS",
+        "RAIA",
+        "ESCOLA",
+        "COLEGIO",
+        "FACULDADE",
+        "MENSALIDADE ESCOLAR",
+        "ACADEMIA",
+        "SMARTFIT",
+        "SALAO",
+        "BARBEARIA",
+        "PET SHOP",
+        "PETZ",
+        "COBASI",
+        "SHOPPING",
+        "CINEMA",
+        "VIAGEM",
+        "HOTEL",
+        "AIRBNB",
+        "PLANO DE SAUDE FAMILIA",
+        "CONSORCIO PESSOAL"
+      ],
+      "priority": 4
+    },
+    {
+      "code": "outros_entradas",
+      "name": "Outras entradas",
+      "group": "outros",
+      "direction": "inflow",
+      "keywords": [],
+      "priority": 0
+    },
+    {
+      "code": "outros_saidas",
+      "name": "Outras saídas",
+      "group": "outros",
+      "direction": "outflow",
+      "keywords": [],
+      "priority": 0
+    }
+  ],
+  "questions": [
+    {
+      "code": "cf_separacao",
+      "dimension": "caixa_financas",
+      "text": "Você usa a conta da empresa para pagar despesas pessoais?",
+      "options": [
+        {
+          "value": "sempre",
+          "label": "Sim, é tudo junto",
+          "score": 0
+        },
+        {
+          "value": "as_vezes",
+          "label": "Às vezes, quando aperta",
+          "score": 40
+        },
+        {
+          "value": "raramente",
+          "label": "Raramente",
+          "score": 75
+        },
+        {
+          "value": "nunca",
+          "label": "Nunca. Tiro um pró-labore fixo",
+          "score": 100
+        }
+      ],
+      "weight": 1.5
+    },
+    {
+      "code": "cf_controle_caixa",
+      "dimension": "caixa_financas",
+      "text": "Como você acompanha entradas e saídas?",
+      "options": [
+        {
+          "value": "saldo_banco",
+          "label": "Olho o saldo no banco",
+          "score": 10
+        },
+        {
+          "value": "anotacoes",
+          "label": "Anoto quando dá",
+          "score": 35
+        },
+        {
+          "value": "planilha",
+          "label": "Planilha ou sistema atualizado toda semana",
+          "score": 75
+        },
+        {
+          "value": "fluxo_projetado",
+          "label": "Fluxo de caixa projetado para os próximos 90 dias",
+          "score": 100
+        }
+      ],
+      "weight": 1.3
+    },
+    {
+      "code": "cf_precificacao",
+      "dimension": "caixa_financas",
+      "text": "Como você define o preço dos seus produtos ou serviços?",
+      "options": [
+        {
+          "value": "concorrente",
+          "label": "Pelo preço do concorrente",
+          "score": 15
+        },
+        {
+          "value": "feeling",
+          "label": "No feeling, pela experiência",
+          "score": 20
+        },
+        {
+          "value": "custo",
+          "label": "Somo o custo e coloco uma margem",
+          "score": 60
+        },
+        {
+          "value": "margem",
+          "label": "Calculo custo, impostos, taxas e margem desejada",
+          "score": 100
+        }
+      ],
+      "weight": 1.2
+    },
+    {
+      "code": "cf_precificacao_revisao",
+      "dimension": "caixa_financas",
+      "text": "Quando foi a última revisão dos seus preços com base nos custos?",
+      "options": [
+        {
+          "value": "nunca",
+          "label": "Nunca revisei",
+          "score": 10
+        },
+        {
+          "value": "mais_ano",
+          "label": "Há mais de um ano",
+          "score": 40
+        },
+        {
+          "value": "semestre",
+          "label": "Nos últimos 6 meses",
+          "score": 80
+        },
+        {
+          "value": "rotina",
+          "label": "Reviso a cada trimestre",
+          "score": 100
+        }
+      ],
+      "weight": 1,
+      "show_if": {
+        "question": "cf_precificacao",
+        "in": [
+          "custo",
+          "margem"
+        ]
+      }
+    },
+    {
+      "code": "vc_rotina",
+      "dimension": "vendas_clientes",
+      "text": "Como as vendas acontecem hoje?",
+      "options": [
+        {
+          "value": "espera",
+          "label": "Esperamos o cliente chegar",
+          "score": 15
+        },
+        {
+          "value": "dono",
+          "label": "O dono vende quando tem tempo",
+          "score": 30
+        },
+        {
+          "value": "rotina",
+          "label": "Temos uma rotina de contato com clientes",
+          "score": 75
+        },
+        {
+          "value": "metas",
+          "label": "Rotina com metas e acompanhamento semanal",
+          "score": 100
+        }
+      ],
+      "weight": 1.4
+    },
+    {
+      "code": "vc_base_clientes",
+      "dimension": "vendas_clientes",
+      "text": "Você tem uma lista organizada dos seus clientes (nome, contato, última compra)?",
+      "options": [
+        {
+          "value": "nao",
+          "label": "Não",
+          "score": 0
+        },
+        {
+          "value": "whatsapp",
+          "label": "Só no WhatsApp",
+          "score": 30
+        },
+        {
+          "value": "planilha",
+          "label": "Em planilha ou sistema, desatualizada",
+          "score": 55
+        },
+        {
+          "value": "atualizada",
+          "label": "Sim, atualizada e usada para vender de novo",
+          "score": 100
+        }
+      ],
+      "weight": 1
+    },
+    {
+      "code": "vc_posvenda",
+      "dimension": "vendas_clientes",
+      "text": "Depois da venda, o que acontece?",
+      "options": [
+        {
+          "value": "nada",
+          "label": "Nada, só se o cliente voltar",
+          "score": 10
+        },
+        {
+          "value": "as_vezes",
+          "label": "Às vezes mandamos uma mensagem",
+          "score": 40
+        },
+        {
+          "value": "sempre",
+          "label": "Sempre fazemos contato e pedimos avaliação ou indicação",
+          "score": 100
+        }
+      ],
+      "weight": 1
+    },
+    {
+      "code": "vc_metas",
+      "dimension": "vendas_clientes",
+      "text": "A empresa tem meta de faturamento mensal?",
+      "options": [
+        {
+          "value": "nao",
+          "label": "Não",
+          "score": 0
+        },
+        {
+          "value": "cabeca",
+          "label": "Só na minha cabeça",
+          "score": 30
+        },
+        {
+          "value": "escrita",
+          "label": "Escrita, mas não acompanhamos",
+          "score": 55
+        },
+        {
+          "value": "acompanhada",
+          "label": "Escrita e acompanhada toda semana",
+          "score": 100
+        }
+      ],
+      "weight": 1
+    },
+    {
+      "code": "mm_origem",
+      "dimension": "marketing_marca",
+      "text": "Você sabe de onde vêm seus novos clientes?",
+      "options": [
+        {
+          "value": "nao",
+          "label": "Não faço ideia",
+          "score": 0
+        },
+        {
+          "value": "impressao",
+          "label": "Tenho uma impressão",
+          "score": 35
+        },
+        {
+          "value": "medido",
+          "label": "Sim, anotamos a origem de cada cliente",
+          "score": 100
+        }
+      ],
+      "weight": 1
+    },
+    {
+      "code": "mm_presenca",
+      "dimension": "marketing_marca",
+      "text": "Como está a presença da empresa na internet (Google, redes, WhatsApp Business)?",
+      "options": [
+        {
+          "value": "nenhuma",
+          "label": "Praticamente não existe",
+          "score": 0
+        },
+        {
+          "value": "basica",
+          "label": "Tem perfil, mas parado",
+          "score": 30
+        },
+        {
+          "value": "ativa",
+          "label": "Postamos com frequência",
+          "score": 65
+        },
+        {
+          "value": "gera_clientes",
+          "label": "Gera clientes todo mês e medimos isso",
+          "score": 100
+        }
+      ],
+      "weight": 1
+    },
+    {
+      "code": "mm_whatsapp",
+      "dimension": "marketing_marca",
+      "text": "Quando um interessado chama no WhatsApp, como é o atendimento?",
+      "options": [
+        {
+          "value": "demora",
+          "label": "Respondemos quando dá",
+          "score": 10
+        },
+        {
+          "value": "rapido",
+          "label": "Respondemos rápido, sem roteiro",
+          "score": 45
+        },
+        {
+          "value": "roteiro",
+          "label": "Temos roteiro, catálogo e acompanhamos quem não fechou",
+          "score": 100
+        }
+      ],
+      "weight": 1
+    },
+    {
+      "code": "oe_padrao",
+      "dimension": "operacao_entrega",
+      "text": "O serviço ou produto principal é feito sempre do mesmo jeito, por qualquer pessoa da equipe?",
+      "options": [
+        {
+          "value": "dono",
+          "label": "Só sai certo se eu fizer",
+          "score": 10
+        },
+        {
+          "value": "depende",
+          "label": "Depende de quem faz",
+          "score": 35
+        },
+        {
+          "value": "checklist",
+          "label": "Temos um passo a passo ou checklist",
+          "score": 80
+        },
+        {
+          "value": "medido",
+          "label": "Temos padrão e medimos a qualidade",
+          "score": 100
+        }
+      ],
+      "weight": 1.2
+    },
+    {
+      "code": "oe_prazo",
+      "dimension": "operacao_entrega",
+      "text": "Com que frequência vocês atrasam entregas?",
+      "options": [
+        {
+          "value": "frequente",
+          "label": "Com frequência",
+          "score": 10
+        },
+        {
+          "value": "as_vezes",
+          "label": "Às vezes",
+          "score": 50
+        },
+        {
+          "value": "raro",
+          "label": "Raramente, e avisamos antes",
+          "score": 100
+        }
+      ],
+      "weight": 1
+    },
+    {
+      "code": "oe_reclamacoes",
+      "dimension": "operacao_entrega",
+      "text": "O que acontece com as reclamações dos clientes?",
+      "options": [
+        {
+          "value": "nada",
+          "label": "Resolvemos na hora e esquecemos",
+          "score": 20
+        },
+        {
+          "value": "anotamos",
+          "label": "Anotamos algumas",
+          "score": 50
+        },
+        {
+          "value": "melhoria",
+          "label": "Registramos e corrigimos a causa",
+          "score": 100
+        }
+      ],
+      "weight": 1
+    },
+    {
+      "code": "pl_papeis",
+      "dimension": "pessoas_lideranca",
+      "text": "Cada pessoa da equipe sabe exatamente pelo que é responsável?",
+      "options": [
+        {
+          "value": "nao",
+          "label": "Não, todo mundo faz de tudo",
+          "score": 10
+        },
+        {
+          "value": "informal",
+          "label": "Mais ou menos, de forma informal",
+          "score": 45
+        },
+        {
+          "value": "escrito",
+          "label": "Sim, está escrito e combinado",
+          "score": 100
+        }
+      ],
+      "weight": 1.2
+    },
+    {
+      "code": "pl_reuniao",
+      "dimension": "pessoas_lideranca",
+      "text": "Vocês fazem reunião de equipe com frequência?",
+      "options": [
+        {
+          "value": "nunca",
+          "label": "Nunca ou só quando dá problema",
+          "score": 0
+        },
+        {
+          "value": "as_vezes",
+          "label": "Às vezes",
+          "score": 40
+        },
+        {
+          "value": "semanal",
+          "label": "Toda semana, curta e com pauta",
+          "score": 100
+        }
+      ],
+      "weight": 1
+    },
+    {
+      "code": "pl_dono_operacional",
+      "dimension": "pessoas_lideranca",
+      "text": "Quanto do seu tempo vai para tarefas operacionais que outra pessoa poderia fazer?",
+      "options": [
+        {
+          "value": "quase_tudo",
+          "label": "Quase todo o tempo",
+          "score": 10
+        },
+        {
+          "value": "metade",
+          "label": "Mais ou menos metade",
+          "score": 45
+        },
+        {
+          "value": "pouco",
+          "label": "Pouco. Foco em vender, liderar e decidir",
+          "score": 100
+        }
+      ],
+      "weight": 1
+    },
+    {
+      "code": "df_direcao",
+      "dimension": "direcao_foco",
+      "text": "Você tem claro onde quer que a empresa esteja daqui a 12 meses?",
+      "options": [
+        {
+          "value": "nao",
+          "label": "Não paro para pensar nisso",
+          "score": 0
+        },
+        {
+          "value": "cabeca",
+          "label": "Tenho uma ideia na cabeça",
+          "score": 35
+        },
+        {
+          "value": "escrito",
+          "label": "Está escrito, com metas",
+          "score": 80
+        },
+        {
+          "value": "compartilhado",
+          "label": "Escrito, com metas, e a equipe conhece",
+          "score": 100
+        }
+      ],
+      "weight": 1.2
+    },
+    {
+      "code": "df_prioridades",
+      "dimension": "direcao_foco",
+      "text": "Quantas iniciativas importantes você está tocando ao mesmo tempo?",
+      "options": [
+        {
+          "value": "muitas",
+          "label": "Muitas, perdi a conta",
+          "score": 10
+        },
+        {
+          "value": "varias",
+          "label": "De 4 a 6",
+          "score": 40
+        },
+        {
+          "value": "poucas",
+          "label": "No máximo 3, e eu sei quais são",
+          "score": 100
+        }
+      ],
+      "weight": 1
+    },
+    {
+      "code": "df_numeros",
+      "dimension": "direcao_foco",
+      "text": "Quais números da empresa você olha toda semana?",
+      "options": [
+        {
+          "value": "nenhum",
+          "label": "Só o saldo do banco",
+          "score": 10
+        },
+        {
+          "value": "vendas",
+          "label": "Vendas da semana",
+          "score": 45
+        },
+        {
+          "value": "painel",
+          "label": "Um painel com caixa, vendas e indicadores principais",
+          "score": 100
+        }
+      ],
+      "weight": 1
+    }
+  ],
+  "tracks": [
+    {
+      "code": "cf-cobranca",
+      "version": 1,
+      "title": "Cobrança sem constrangimento",
+      "dimension": "caixa_financas",
+      "stages": [
+        "sobrevivencia",
+        "organizacao",
+        "crescimento"
+      ],
+      "tags": [
+        "caixa"
+      ],
+      "objective": "Reduzir a inadimplência com uma rotina simples de lembrete e cobrança.",
+      "why": "Dinheiro vendido e não recebido é o capital de giro mais barato que existe.",
+      "impact": 4,
+      "effort": 2,
+      "triggers": [
+        {
+          "signal": "metric:inadimplencia_pct",
+          "op": "gt",
+          "value": 5,
+          "weight": 3
+        },
+        {
+          "signal": "metric:folego_caixa_dias",
+          "op": "lt",
+          "value": 30,
+          "weight": 1
+        }
+      ],
+      "requires": {
+        "bank_statement": false,
+        "team_min": 1
+      },
+      "indicator": {
+        "metric": "inadimplencia_pct",
+        "target": {
+          "type": "pct_change",
+          "value": -0.3,
+          "min": 2
+        }
+      },
+      "milestones": [
+        {
+          "code": "m1",
+          "title": "Lista de devedores",
+          "week": 1,
+          "evidence": "Planilha com cliente, valor, vencimento e dias de atraso.",
+          "actions": [
+            {
+              "title": "Listar todos os valores vencidos com cliente, valor e data",
+              "week": 1,
+              "role": "owner",
+              "minutes": 45
+            }
+          ]
+        },
+        {
+          "code": "m2",
+          "title": "Régua de cobrança ativa",
+          "week": 3,
+          "evidence": "Mensagens de lembrete (antes do vencimento) e cobrança (1, 7 e 15 dias) em uso.",
+          "actions": [
+            {
+              "title": "Configurar lembrete 2 dias antes do vencimento",
+              "week": 2,
+              "role": "owner",
+              "minutes": 30
+            },
+            {
+              "title": "Enviar a mensagem de cobrança para os atrasados da lista",
+              "week": 3,
+              "role": "manager",
+              "minutes": 45
+            }
+          ]
+        },
+        {
+          "code": "m3",
+          "title": "Política de crédito",
+          "week": 6,
+          "evidence": "Regras escritas de quando vender a prazo, entrada mínima e bloqueio por atraso.",
+          "actions": [
+            {
+              "title": "Escrever as regras de venda a prazo (quem pode, quanto, entrada)",
+              "week": 5,
+              "role": "owner",
+              "minutes": 30
+            },
+            {
+              "title": "Oferecer Pix ou cartão como padrão nas novas vendas",
+              "week": 6,
+              "role": "owner",
+              "minutes": 20
+            }
+          ]
+        },
+        {
+          "code": "m4",
+          "title": "Inadimplência medida",
+          "week": 12,
+          "evidence": "Inadimplência do mês registrada e abaixo da meta.",
+          "actions": [
+            {
+              "title": "Registrar a inadimplência do mês no painel",
+              "week": 10,
+              "role": "owner",
+              "minutes": 15
+            },
+            {
+              "title": "Negociar os casos acima de 60 dias",
+              "week": 12,
+              "role": "owner",
+              "minutes": 45
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "title": "Mensagem de cobrança (7 dias)",
+          "kind": "script",
+          "body": "Oi, {nome}, tudo bem? Notei que o pagamento de {valor}, com vencimento em {data}, ainda está em aberto. Posso te mandar o Pix ou o boleto atualizado?"
+        }
+      ]
+    },
+    {
+      "code": "cf-folego-30-dias",
+      "version": 1,
+      "title": "Fôlego de caixa de 30 dias",
+      "dimension": "caixa_financas",
+      "stages": [
+        "sobrevivencia",
+        "organizacao",
+        "crescimento"
+      ],
+      "tags": [
+        "caixa"
+      ],
+      "objective": "Construir uma reserva equivalente a 30 dias de saídas.",
+      "why": "Sem reserva, qualquer imprevisto vira empréstimo caro ou noite sem dormir.",
+      "impact": 5,
+      "effort": 3,
+      "triggers": [
+        {
+          "signal": "metric:folego_caixa_dias",
+          "op": "lt",
+          "value": 30,
+          "weight": 3
+        },
+        {
+          "signal": "metric:tarifas_bancarias_pct",
+          "op": "gt",
+          "value": 2,
+          "weight": 1
+        }
+      ],
+      "requires": {
+        "bank_statement": true,
+        "team_min": 1
+      },
+      "indicator": {
+        "metric": "folego_caixa_dias",
+        "target": {
+          "type": "absolute",
+          "value": 30
+        }
+      },
+      "milestones": [
+        {
+          "code": "m1",
+          "title": "Saídas mapeadas",
+          "week": 2,
+          "evidence": "Lista das saídas fixas e variáveis do mês, vinda do Raio-X.",
+          "actions": [
+            {
+              "title": "Revisar no Raio-X as 10 maiores saídas do mês",
+              "week": 1,
+              "role": "owner",
+              "minutes": 30
+            },
+            {
+              "title": "Marcar o que é corte possível, renegociação ou manutenção",
+              "week": 2,
+              "role": "owner",
+              "minutes": 30
+            }
+          ]
+        },
+        {
+          "code": "m2",
+          "title": "Cortes e renegociações",
+          "week": 5,
+          "evidence": "Pelo menos 3 despesas cortadas ou renegociadas, com valor economizado.",
+          "actions": [
+            {
+              "title": "Cancelar assinaturas e serviços sem uso",
+              "week": 3,
+              "role": "owner",
+              "minutes": 30
+            },
+            {
+              "title": "Renegociar tarifas bancárias e juros",
+              "week": 4,
+              "role": "owner",
+              "minutes": 45
+            },
+            {
+              "title": "Renegociar prazo com 2 fornecedores",
+              "week": 5,
+              "role": "owner",
+              "minutes": 45
+            }
+          ]
+        },
+        {
+          "code": "m3",
+          "title": "Reserva automática",
+          "week": 6,
+          "evidence": "Transferência fixa semanal ou mensal para uma aplicação de liquidez diária.",
+          "actions": [
+            {
+              "title": "Abrir aplicação de liquidez diária no nome da empresa",
+              "week": 6,
+              "role": "owner",
+              "minutes": 20
+            },
+            {
+              "title": "Programar a transferência de um percentual de toda entrada",
+              "week": 6,
+              "role": "owner",
+              "minutes": 15
+            }
+          ]
+        },
+        {
+          "code": "m4",
+          "title": "Fôlego acompanhado",
+          "week": 12,
+          "evidence": "Fôlego de caixa medido pelo Raio-X a cada mês.",
+          "actions": [
+            {
+              "title": "Enviar o extrato do mês para recalcular o fôlego",
+              "week": 8,
+              "role": "owner",
+              "minutes": 10
+            },
+            {
+              "title": "Enviar o extrato do mês para recalcular o fôlego",
+              "week": 12,
+              "role": "owner",
+              "minutes": 10
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "title": "Regra da reserva",
+          "kind": "modelo",
+          "body": "Separe de 5% a 10% de toda entrada para a reserva até atingir 30 dias de saídas médias."
+        }
+      ]
+    },
+    {
+      "code": "cf-preco-com-margem",
+      "version": 1,
+      "title": "Preço com margem",
+      "dimension": "caixa_financas",
+      "stages": [
+        "sobrevivencia",
+        "organizacao",
+        "crescimento"
+      ],
+      "tags": [
+        "caixa",
+        "margem"
+      ],
+      "objective": "Calcular a margem real dos principais produtos ou serviços e ajustar os preços que estão no prejuízo.",
+      "why": "Vender muito com margem errada acelera o prejuízo. Preço é a alavanca de lucro mais rápida que existe.",
+      "impact": 5,
+      "effort": 3,
+      "triggers": [
+        {
+          "signal": "metric:margem_bruta_pct",
+          "op": "lt",
+          "value": 35,
+          "weight": 3
+        },
+        {
+          "signal": "dimension:caixa_financas",
+          "op": "lt",
+          "value": 60,
+          "weight": 1
+        },
+        {
+          "signal": "metric:meses_caixa_negativo",
+          "op": "gte",
+          "value": 1,
+          "weight": 1
+        }
+      ],
+      "requires": {
+        "bank_statement": false,
+        "team_min": 1
+      },
+      "indicator": {
+        "metric": "margem_bruta_pct",
+        "target": {
+          "type": "delta",
+          "value": 5,
+          "max": 80
+        }
+      },
+      "milestones": [
+        {
+          "code": "m1",
+          "title": "Top 5 itens mapeados",
+          "week": 2,
+          "evidence": "Lista dos 5 itens que mais faturam, com preço atual e custo direto.",
+          "actions": [
+            {
+              "title": "Listar os 5 produtos ou serviços que mais trazem faturamento",
+              "week": 1,
+              "role": "owner",
+              "minutes": 30
+            },
+            {
+              "title": "Levantar o custo direto de cada um (material, insumo, comissão, frete)",
+              "week": 2,
+              "role": "owner",
+              "minutes": 60
+            }
+          ]
+        },
+        {
+          "code": "m2",
+          "title": "Margem real calculada",
+          "week": 4,
+          "evidence": "Margem de cada item calculada na calculadora de preço do app.",
+          "actions": [
+            {
+              "title": "Usar a calculadora de preço com impostos e taxas de cartão para cada item",
+              "week": 3,
+              "role": "owner",
+              "minutes": 45
+            },
+            {
+              "title": "Marcar os itens com margem abaixo da meta",
+              "week": 4,
+              "role": "owner",
+              "minutes": 20
+            }
+          ]
+        },
+        {
+          "code": "m3",
+          "title": "Novos preços em vigor",
+          "week": 7,
+          "evidence": "Tabela de preços nova publicada e comunicada aos clientes.",
+          "actions": [
+            {
+              "title": "Definir novos preços para os itens abaixo da meta (ou cortar custo)",
+              "week": 5,
+              "role": "owner",
+              "minutes": 45
+            },
+            {
+              "title": "Comunicar o reajuste aos clientes com o roteiro pronto",
+              "week": 6,
+              "role": "owner",
+              "minutes": 30
+            },
+            {
+              "title": "Atualizar catálogo, cardápio ou tabela",
+              "week": 7,
+              "role": "owner",
+              "minutes": 30
+            }
+          ]
+        },
+        {
+          "code": "m4",
+          "title": "Margem acompanhada",
+          "week": 12,
+          "evidence": "Margem bruta do mês registrada por dois meses seguidos.",
+          "actions": [
+            {
+              "title": "Registrar a margem bruta do mês no painel",
+              "week": 9,
+              "role": "owner",
+              "minutes": 15
+            },
+            {
+              "title": "Revisar se algum cliente ou item precisa de ajuste fino",
+              "week": 12,
+              "role": "owner",
+              "minutes": 30
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "title": "Fórmula do preço",
+          "kind": "modelo",
+          "body": "Preço = Custo direto / (1 - (% impostos + % taxas + % comissão + % margem desejada))."
+        },
+        {
+          "title": "Mensagem de reajuste",
+          "kind": "script",
+          "body": "Olá, {nome}! Para manter a qualidade que você conhece, nossos preços terão um ajuste a partir de {data}. Quem fechar até lá mantém o valor atual. Qualquer dúvida, estou aqui."
+        }
+      ]
+    },
+    {
+      "code": "cf-separar-pf-pj",
+      "version": 1,
+      "title": "Separar PF e PJ em 30 dias",
+      "dimension": "caixa_financas",
+      "stages": [
+        "sobrevivencia",
+        "organizacao"
+      ],
+      "tags": [
+        "base",
+        "caixa"
+      ],
+      "objective": "Parar de pagar despesas pessoais com a conta da empresa e definir um pró-labore fixo.",
+      "why": "Enquanto as contas se misturam, ninguém sabe se a empresa dá lucro. É a base de todas as outras decisões.",
+      "impact": 5,
+      "effort": 2,
+      "triggers": [
+        {
+          "signal": "metric:despesas_pessoais_pj_pct",
+          "op": "gt",
+          "value": 5,
+          "weight": 3
+        },
+        {
+          "signal": "dimension:caixa_financas",
+          "op": "lt",
+          "value": 50,
+          "weight": 1
+        }
+      ],
+      "requires": {
+        "bank_statement": true,
+        "team_min": 1
+      },
+      "indicator": {
+        "metric": "despesas_pessoais_pj_pct",
+        "target": {
+          "type": "absolute",
+          "value": 5
+        }
+      },
+      "milestones": [
+        {
+          "code": "m1",
+          "title": "Retrato do que é pessoal",
+          "week": 2,
+          "evidence": "Lista das despesas pessoais pagas pela PJ nos últimos 3 meses, com o total.",
+          "actions": [
+            {
+              "title": "Revisar no Raio-X todas as saídas marcadas como possível gasto pessoal e confirmar uma a uma",
+              "week": 1,
+              "role": "owner",
+              "minutes": 40
+            },
+            {
+              "title": "Somar quanto a família custa por mês (moradia, escola, saúde, lazer)",
+              "week": 2,
+              "role": "owner",
+              "minutes": 45
+            }
+          ]
+        },
+        {
+          "code": "m2",
+          "title": "Pró-labore definido",
+          "week": 4,
+          "evidence": "Valor de pró-labore registrado e combinado com o contador.",
+          "actions": [
+            {
+              "title": "Definir o pró-labore com base no custo da família e no que a empresa suporta",
+              "week": 3,
+              "role": "owner",
+              "minutes": 30
+            },
+            {
+              "title": "Combinar com o contador o valor e a forma de pagamento do pró-labore",
+              "week": 4,
+              "role": "owner",
+              "minutes": 30
+            }
+          ]
+        },
+        {
+          "code": "m3",
+          "title": "Contas separadas",
+          "week": 6,
+          "evidence": "Conta pessoal recebendo o pró-labore e cartões pessoais desvinculados da PJ.",
+          "actions": [
+            {
+              "title": "Abrir ou ativar uma conta pessoal só para receber o pró-labore",
+              "week": 5,
+              "role": "owner",
+              "minutes": 30
+            },
+            {
+              "title": "Trocar débitos automáticos pessoais da conta PJ para a conta pessoal",
+              "week": 6,
+              "role": "owner",
+              "minutes": 45
+            }
+          ]
+        },
+        {
+          "code": "m4",
+          "title": "Rotina mantida",
+          "week": 12,
+          "evidence": "Dois meses seguidos com despesas pessoais abaixo de 5% das saídas da PJ.",
+          "actions": [
+            {
+              "title": "Conferir no ritual semanal se houve algum gasto pessoal na conta da empresa",
+              "week": 8,
+              "role": "owner",
+              "minutes": 10
+            },
+            {
+              "title": "Enviar o extrato do mês para atualizar o Raio-X",
+              "week": 12,
+              "role": "owner",
+              "minutes": 10
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "title": "Cálculo do pró-labore",
+          "kind": "planilha",
+          "body": "Custo mensal da família | Média de sobra da empresa nos últimos 3 meses | Pró-labore = menor valor entre (custo da família) e (60% da sobra média)."
+        }
+      ]
+    },
+    {
+      "code": "df-direcao-em-uma-pagina",
+      "version": 1,
+      "title": "Direção em uma página",
+      "dimension": "direcao_foco",
+      "stages": [
+        "organizacao",
+        "crescimento",
+        "escala"
+      ],
+      "tags": [
+        "direcao"
+      ],
+      "objective": "Escrever, em uma página, onde a empresa quer estar em 12 meses, com metas e três apostas.",
+      "why": "Sem direção, cada oportunidade parece prioridade. Com direção, fica fácil dizer não.",
+      "impact": 3,
+      "effort": 2,
+      "triggers": [
+        {
+          "signal": "dimension:direcao_foco",
+          "op": "lt",
+          "value": 50,
+          "weight": 2
+        },
+        {
+          "signal": "maturity:avg",
+          "op": "gte",
+          "value": 45,
+          "weight": 1
+        }
+      ],
+      "requires": {
+        "bank_statement": false,
+        "team_min": 1
+      },
+      "indicator": {
+        "metric": "direcao_definida_pct",
+        "target": {
+          "type": "absolute",
+          "value": 100
+        }
+      },
+      "milestones": [
+        {
+          "code": "m1",
+          "title": "Onde queremos chegar",
+          "week": 2,
+          "evidence": "Visão de 12 meses com faturamento, lucro e tamanho de equipe.",
+          "actions": [
+            {
+              "title": "Responder: como estará a empresa daqui a 12 meses, em números?",
+              "week": 1,
+              "role": "owner",
+              "minutes": 45
+            }
+          ]
+        },
+        {
+          "code": "m2",
+          "title": "Três apostas",
+          "week": 4,
+          "evidence": "Três apostas do ano e o que a empresa não vai fazer.",
+          "actions": [
+            {
+              "title": "Escolher as 3 apostas do ano e 3 coisas que a empresa não vai fazer",
+              "week": 3,
+              "role": "owner",
+              "minutes": 45
+            }
+          ]
+        },
+        {
+          "code": "m3",
+          "title": "Página compartilhada",
+          "week": 6,
+          "evidence": "Página apresentada para a equipe ou os sócios.",
+          "actions": [
+            {
+              "title": "Apresentar a página para a equipe ou os sócios",
+              "week": 6,
+              "role": "owner",
+              "minutes": 45
+            }
+          ]
+        },
+        {
+          "code": "m4",
+          "title": "Página conectada ao ciclo",
+          "week": 12,
+          "evidence": "Prioridades do próximo ciclo escolhidas a partir das apostas.",
+          "actions": [
+            {
+              "title": "Usar as apostas para escolher as prioridades do próximo ciclo",
+              "week": 12,
+              "role": "owner",
+              "minutes": 30
+            }
+          ]
+        }
+      ],
+      "templates": []
+    },
+    {
+      "code": "df-governanca-socios",
+      "version": 1,
+      "title": "Combinados entre sócios",
+      "dimension": "direcao_foco",
+      "stages": [
+        "crescimento",
+        "escala"
+      ],
+      "tags": [
+        "direcao",
+        "governanca"
+      ],
+      "objective": "Formalizar papéis, retiradas e uma reunião mensal de resultado entre sócios.",
+      "why": "Desalinhamento entre sócios é uma das causas mais caras de crise em pequenas empresas.",
+      "impact": 3,
+      "effort": 3,
+      "triggers": [
+        {
+          "signal": "dimension:direcao_foco",
+          "op": "lt",
+          "value": 70,
+          "weight": 1
+        },
+        {
+          "signal": "maturity:avg",
+          "op": "gte",
+          "value": 55,
+          "weight": 1
+        }
+      ],
+      "requires": {
+        "bank_statement": false,
+        "team_min": 3
+      },
+      "indicator": {
+        "metric": "reunioes_socios_pct",
+        "target": {
+          "type": "absolute",
+          "value": 100
+        }
+      },
+      "milestones": [
+        {
+          "code": "m1",
+          "title": "Papéis dos sócios",
+          "week": 2,
+          "evidence": "Responsabilidades de cada sócio escritas.",
+          "actions": [
+            {
+              "title": "Escrever as responsabilidades e a dedicação de cada sócio",
+              "week": 2,
+              "role": "owner",
+              "minutes": 45
+            }
+          ]
+        },
+        {
+          "code": "m2",
+          "title": "Regras de retirada",
+          "week": 4,
+          "evidence": "Pró-labore e regra de distribuição de lucro combinados.",
+          "actions": [
+            {
+              "title": "Combinar pró-labore e regra de distribuição de lucro com o contador",
+              "week": 4,
+              "role": "owner",
+              "minutes": 60
+            }
+          ]
+        },
+        {
+          "code": "m3",
+          "title": "Reunião mensal",
+          "week": 8,
+          "evidence": "Duas reuniões mensais de resultado realizadas, com ata curta.",
+          "actions": [
+            {
+              "title": "Fazer a reunião mensal de resultado com os números do painel",
+              "week": 5,
+              "role": "owner",
+              "minutes": 60
+            }
+          ]
+        },
+        {
+          "code": "m4",
+          "title": "Acordo formal",
+          "week": 12,
+          "evidence": "Pontos para o acordo de sócios levados ao advogado.",
+          "actions": [
+            {
+              "title": "Listar os pontos para um acordo de sócios e agendar com o advogado",
+              "week": 12,
+              "role": "owner",
+              "minutes": 30
+            }
+          ]
+        }
+      ],
+      "templates": []
+    },
+    {
+      "code": "df-meta-mensal",
+      "version": 1,
+      "title": "Meta mensal da empresa e por pessoa",
+      "dimension": "direcao_foco",
+      "stages": [
+        "organizacao",
+        "crescimento",
+        "escala"
+      ],
+      "tags": [
+        "direcao",
+        "vendas"
+      ],
+      "objective": "Definir a meta de faturamento do mês e desdobrá-la por pessoa ou canal.",
+      "why": "Sem meta, toda semana parece boa ou ruim por impressão. Meta transforma esforço em resultado comparável.",
+      "impact": 4,
+      "effort": 2,
+      "triggers": [
+        {
+          "signal": "dimension:direcao_foco",
+          "op": "lt",
+          "value": 60,
+          "weight": 2
+        },
+        {
+          "signal": "dimension:vendas_clientes",
+          "op": "lt",
+          "value": 60,
+          "weight": 1
+        }
+      ],
+      "requires": {
+        "bank_statement": false,
+        "team_min": 1
+      },
+      "indicator": {
+        "metric": "equipe_com_meta_pct",
+        "target": {
+          "type": "absolute",
+          "value": 100
+        }
+      },
+      "milestones": [
+        {
+          "code": "m1",
+          "title": "Meta da empresa",
+          "week": 2,
+          "evidence": "Meta de faturamento do próximo mês calculada a partir do ponto de equilíbrio.",
+          "actions": [
+            {
+              "title": "Calcular o ponto de equilíbrio na calculadora do app",
+              "week": 1,
+              "role": "owner",
+              "minutes": 30
+            },
+            {
+              "title": "Definir a meta do mês: ponto de equilíbrio + lucro desejado",
+              "week": 2,
+              "role": "owner",
+              "minutes": 20
+            }
+          ]
+        },
+        {
+          "code": "m2",
+          "title": "Meta desdobrada",
+          "week": 4,
+          "evidence": "Meta dividida por pessoa, canal ou produto.",
+          "actions": [
+            {
+              "title": "Dividir a meta por pessoa ou canal de venda",
+              "week": 3,
+              "role": "owner",
+              "minutes": 30
+            },
+            {
+              "title": "Combinar a meta individualmente com cada pessoa",
+              "week": 4,
+              "role": "owner",
+              "minutes": 45
+            }
+          ]
+        },
+        {
+          "code": "m3",
+          "title": "Acompanhamento semanal",
+          "week": 8,
+          "evidence": "Realizado contra meta revisado toda semana na reunião ou no ritual.",
+          "actions": [
+            {
+              "title": "Registrar no ritual o faturamento acumulado do mês",
+              "week": 5,
+              "role": "owner",
+              "minutes": 5
+            }
+          ]
+        },
+        {
+          "code": "m4",
+          "title": "Fechamento do mês",
+          "week": 12,
+          "evidence": "Dois meses fechados com a meta comparada ao realizado.",
+          "actions": [
+            {
+              "title": "Fechar o mês e definir a meta seguinte com base no resultado",
+              "week": 12,
+              "role": "owner",
+              "minutes": 30
+            }
+          ]
+        }
+      ],
+      "templates": []
+    },
+    {
+      "code": "df-numeros-da-semana",
+      "version": 1,
+      "title": "Os 5 números da semana",
+      "dimension": "direcao_foco",
+      "stages": [
+        "sobrevivencia",
+        "organizacao",
+        "crescimento",
+        "escala"
+      ],
+      "tags": [
+        "direcao",
+        "base"
+      ],
+      "objective": "Escolher e acompanhar toda semana os 5 números que mostram a saúde da empresa.",
+      "why": "Quem só olha o saldo do banco descobre os problemas tarde demais.",
+      "impact": 4,
+      "effort": 1,
+      "triggers": [
+        {
+          "signal": "dimension:direcao_foco",
+          "op": "lt",
+          "value": 55,
+          "weight": 2
+        },
+        {
+          "signal": "dimension:caixa_financas",
+          "op": "lt",
+          "value": 55,
+          "weight": 1
+        }
+      ],
+      "requires": {
+        "bank_statement": false,
+        "team_min": 1
+      },
+      "indicator": {
+        "metric": "indicadores_atualizados_pct",
+        "target": {
+          "type": "absolute",
+          "value": 100
+        }
+      },
+      "milestones": [
+        {
+          "code": "m1",
+          "title": "Números escolhidos",
+          "week": 1,
+          "evidence": "Cinco indicadores escolhidos no painel do app, com meta.",
+          "actions": [
+            {
+              "title": "Escolher no painel os 5 números da semana (caixa, vendas e um por prioridade)",
+              "week": 1,
+              "role": "owner",
+              "minutes": 20
+            }
+          ]
+        },
+        {
+          "code": "m2",
+          "title": "Primeiras 4 semanas",
+          "week": 5,
+          "evidence": "Quatro semanas com os números atualizados no ritual.",
+          "actions": [
+            {
+              "title": "Atualizar os números no ritual semanal",
+              "week": 2,
+              "role": "owner",
+              "minutes": 5
+            }
+          ]
+        },
+        {
+          "code": "m3",
+          "title": "Decisão pelos números",
+          "week": 8,
+          "evidence": "Uma decisão registrada a partir de um número fora da meta.",
+          "actions": [
+            {
+              "title": "Escolher um número fora da meta e decidir uma ação",
+              "week": 8,
+              "role": "owner",
+              "minutes": 20
+            }
+          ]
+        },
+        {
+          "code": "m4",
+          "title": "Hábito consolidado",
+          "week": 12,
+          "evidence": "Números atualizados em pelo menos 10 das 12 semanas.",
+          "actions": [
+            {
+              "title": "Revisar se os 5 números ainda são os certos para o próximo ciclo",
+              "week": 12,
+              "role": "owner",
+              "minutes": 20
+            }
+          ]
+        }
+      ],
+      "templates": []
+    },
+    {
+      "code": "mm-conteudo-que-vende",
+      "version": 1,
+      "title": "Conteúdo que vende",
+      "dimension": "marketing_marca",
+      "stages": [
+        "organizacao",
+        "crescimento",
+        "escala"
+      ],
+      "tags": [
+        "marketing"
+      ],
+      "objective": "Publicar com regularidade conteúdo que mostra resultado, bastidores e prova social.",
+      "why": "Constância e prova social geram confiança. Para quem está decidindo, isso vale mais que anúncio.",
+      "impact": 3,
+      "effort": 3,
+      "triggers": [
+        {
+          "signal": "dimension:marketing_marca",
+          "op": "lt",
+          "value": 65,
+          "weight": 1
+        },
+        {
+          "signal": "metric:concentracao_receita_pct",
+          "op": "gt",
+          "value": 30,
+          "weight": 1
+        }
+      ],
+      "requires": {
+        "bank_statement": false,
+        "team_min": 1
+      },
+      "indicator": {
+        "metric": "leads_semana",
+        "target": {
+          "type": "pct_change",
+          "value": 0.2,
+          "min": 5
+        }
+      },
+      "milestones": [
+        {
+          "code": "m1",
+          "title": "Linha editorial",
+          "week": 2,
+          "evidence": "Três temas fixos definidos: resultado de cliente, bastidor e dúvida frequente.",
+          "actions": [
+            {
+              "title": "Listar as 10 perguntas que os clientes mais fazem",
+              "week": 1,
+              "role": "owner",
+              "minutes": 30
+            },
+            {
+              "title": "Definir os 3 temas fixos e o dia de cada publicação",
+              "week": 2,
+              "role": "owner",
+              "minutes": 20
+            }
+          ]
+        },
+        {
+          "code": "m2",
+          "title": "Banco de conteúdo",
+          "week": 4,
+          "evidence": "Duas semanas de publicações prontas com antecedência.",
+          "actions": [
+            {
+              "title": "Produzir 6 publicações em um único bloco de tempo",
+              "week": 3,
+              "role": "member",
+              "minutes": 120
+            }
+          ]
+        },
+        {
+          "code": "m3",
+          "title": "Constância",
+          "week": 9,
+          "evidence": "Seis semanas seguidas com 3 publicações por semana.",
+          "actions": [
+            {
+              "title": "Publicar conforme o calendário e responder comentários no mesmo dia",
+              "week": 5,
+              "role": "member",
+              "minutes": 20
+            }
+          ]
+        },
+        {
+          "code": "m4",
+          "title": "Leads medidos",
+          "week": 12,
+          "evidence": "Leads vindos de redes anotados no ritual.",
+          "actions": [
+            {
+              "title": "Registrar no ritual quantos contatos vieram das redes",
+              "week": 12,
+              "role": "owner",
+              "minutes": 5
+            }
+          ]
+        }
+      ],
+      "templates": []
+    },
+    {
+      "code": "mm-funil-whatsapp",
+      "version": 1,
+      "title": "Funil de vendas no WhatsApp",
+      "dimension": "marketing_marca",
+      "stages": [
+        "organizacao",
+        "crescimento"
+      ],
+      "tags": [
+        "vendas",
+        "marketing"
+      ],
+      "objective": "Organizar o atendimento no WhatsApp para não perder interessados.",
+      "why": "Boa parte das vendas de pequenas empresas começa e morre no WhatsApp, sem resposta ou sem acompanhamento.",
+      "impact": 4,
+      "effort": 2,
+      "triggers": [
+        {
+          "signal": "dimension:marketing_marca",
+          "op": "lt",
+          "value": 60,
+          "weight": 2
+        },
+        {
+          "signal": "dimension:vendas_clientes",
+          "op": "lt",
+          "value": 60,
+          "weight": 1
+        }
+      ],
+      "requires": {
+        "bank_statement": false,
+        "team_min": 1
+      },
+      "indicator": {
+        "metric": "conversao_whatsapp_pct",
+        "target": {
+          "type": "delta",
+          "value": 5,
+          "min": 10
+        }
+      },
+      "milestones": [
+        {
+          "code": "m1",
+          "title": "WhatsApp Business configurado",
+          "week": 1,
+          "evidence": "Perfil comercial, catálogo, mensagem de boas-vindas e respostas rápidas configurados.",
+          "actions": [
+            {
+              "title": "Configurar perfil, catálogo e respostas rápidas no WhatsApp Business",
+              "week": 1,
+              "role": "owner",
+              "minutes": 60
+            }
+          ]
+        },
+        {
+          "code": "m2",
+          "title": "Etiquetas de funil",
+          "week": 2,
+          "evidence": "Etiquetas em uso: novo contato, orçamento enviado, negociando, fechado, perdido.",
+          "actions": [
+            {
+              "title": "Criar as etiquetas do funil e marcar as conversas da última semana",
+              "week": 2,
+              "role": "owner",
+              "minutes": 30
+            }
+          ]
+        },
+        {
+          "code": "m3",
+          "title": "Acompanhamento de quem não fechou",
+          "week": 5,
+          "evidence": "Toda conversa em 'orçamento enviado' recebe retorno em até 48 horas.",
+          "actions": [
+            {
+              "title": "Fazer o retorno de todos os orçamentos sem resposta",
+              "week": 3,
+              "role": "member",
+              "minutes": 30
+            },
+            {
+              "title": "Registrar no ritual quantas conversas viraram venda",
+              "week": 5,
+              "role": "owner",
+              "minutes": 5
+            }
+          ]
+        },
+        {
+          "code": "m4",
+          "title": "Conversão medida",
+          "week": 12,
+          "evidence": "Taxa de conversão do mês registrada.",
+          "actions": [
+            {
+              "title": "Calcular a conversão: vendas divididas por conversas comerciais do mês",
+              "week": 12,
+              "role": "owner",
+              "minutes": 20
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "title": "Retorno de orçamento",
+          "kind": "script",
+          "body": "Oi, {nome}! Conseguiu ver o orçamento que te mandei? Se quiser, ajusto alguma coisa para caber melhor para você."
+        }
+      ]
+    },
+    {
+      "code": "mm-origem-clientes",
+      "version": 1,
+      "title": "Saber de onde vem o cliente",
+      "dimension": "marketing_marca",
+      "stages": [
+        "organizacao",
+        "crescimento",
+        "escala"
+      ],
+      "tags": [
+        "marketing",
+        "base"
+      ],
+      "objective": "Registrar a origem de todo novo cliente para investir no que funciona.",
+      "why": "Sem saber a origem, o investimento em marketing é um chute.",
+      "impact": 3,
+      "effort": 1,
+      "triggers": [
+        {
+          "signal": "dimension:marketing_marca",
+          "op": "lt",
+          "value": 45,
+          "weight": 2
+        }
+      ],
+      "requires": {
+        "bank_statement": false,
+        "team_min": 1
+      },
+      "indicator": {
+        "metric": "origem_registrada_pct",
+        "target": {
+          "type": "absolute",
+          "value": 80
+        }
+      },
+      "milestones": [
+        {
+          "code": "m1",
+          "title": "Pergunta padrão",
+          "week": 1,
+          "evidence": "Pergunta 'como nos conheceu?' incluída no atendimento.",
+          "actions": [
+            {
+              "title": "Incluir 'Como você conheceu a gente?' no atendimento e no cadastro",
+              "week": 1,
+              "role": "owner",
+              "minutes": 15
+            }
+          ]
+        },
+        {
+          "code": "m2",
+          "title": "Registro em uso",
+          "week": 4,
+          "evidence": "Origem anotada em pelo menos 60% dos novos clientes.",
+          "actions": [
+            {
+              "title": "Anotar a origem de cada novo cliente numa lista única",
+              "week": 2,
+              "role": "member",
+              "minutes": 10
+            }
+          ]
+        },
+        {
+          "code": "m3",
+          "title": "Primeira leitura",
+          "week": 8,
+          "evidence": "Ranking das origens com número de clientes e faturamento.",
+          "actions": [
+            {
+              "title": "Montar o ranking das origens e levar para a reunião",
+              "week": 8,
+              "role": "owner",
+              "minutes": 30
+            }
+          ]
+        },
+        {
+          "code": "m4",
+          "title": "Decisão de investimento",
+          "week": 12,
+          "evidence": "Uma decisão registrada: reforçar a melhor origem e cortar a pior.",
+          "actions": [
+            {
+              "title": "Decidir onde colocar mais esforço e onde cortar",
+              "week": 12,
+              "role": "owner",
+              "minutes": 30
+            }
+          ]
+        }
+      ],
+      "templates": []
+    },
+    {
+      "code": "mm-presenca-local",
+      "version": 1,
+      "title": "Presença local no Google",
+      "dimension": "marketing_marca",
+      "stages": [
+        "organizacao",
+        "crescimento"
+      ],
+      "tags": [
+        "marketing"
+      ],
+      "objective": "Ser encontrado por quem procura o seu serviço na região.",
+      "why": "Quem procura no Google com intenção de compra está pronto para fechar. Perfil completo e avaliado gera contatos sem anúncio.",
+      "impact": 3,
+      "effort": 2,
+      "triggers": [
+        {
+          "signal": "dimension:marketing_marca",
+          "op": "lt",
+          "value": 50,
+          "weight": 2
+        }
+      ],
+      "requires": {
+        "bank_statement": false,
+        "team_min": 1
+      },
+      "indicator": {
+        "metric": "avaliacoes_publicas_mes",
+        "target": {
+          "type": "absolute",
+          "value": 8
+        }
+      },
+      "milestones": [
+        {
+          "code": "m1",
+          "title": "Perfil completo",
+          "week": 2,
+          "evidence": "Google Perfil da Empresa com fotos, horário, categoria, serviços e WhatsApp.",
+          "actions": [
+            {
+              "title": "Revisar e completar o Google Perfil da Empresa",
+              "week": 1,
+              "role": "owner",
+              "minutes": 60
+            },
+            {
+              "title": "Publicar 10 fotos reais do negócio e da equipe",
+              "week": 2,
+              "role": "owner",
+              "minutes": 30
+            }
+          ]
+        },
+        {
+          "code": "m2",
+          "title": "Rotina de avaliações",
+          "week": 4,
+          "evidence": "Pedido de avaliação incluído no pós-venda.",
+          "actions": [
+            {
+              "title": "Incluir o link de avaliação no pós-venda",
+              "week": 3,
+              "role": "owner",
+              "minutes": 15
+            },
+            {
+              "title": "Responder todas as avaliações antigas",
+              "week": 4,
+              "role": "owner",
+              "minutes": 30
+            }
+          ]
+        },
+        {
+          "code": "m3",
+          "title": "Publicações semanais",
+          "week": 8,
+          "evidence": "Uma publicação por semana no perfil, durante 4 semanas.",
+          "actions": [
+            {
+              "title": "Publicar uma novidade, oferta ou caso por semana no perfil",
+              "week": 6,
+              "role": "member",
+              "minutes": 20
+            }
+          ]
+        },
+        {
+          "code": "m4",
+          "title": "Avaliações medidas",
+          "week": 12,
+          "evidence": "Número de avaliações novas no mês registrado.",
+          "actions": [
+            {
+              "title": "Registrar no ritual quantas avaliações novas entraram no mês",
+              "week": 12,
+              "role": "owner",
+              "minutes": 5
+            }
+          ]
+        }
+      ],
+      "templates": []
+    },
+    {
+      "code": "oe-compras-sem-desperdicio",
+      "version": 1,
+      "title": "Compras e estoque sem desperdício",
+      "dimension": "operacao_entrega",
+      "stages": [
+        "sobrevivencia",
+        "organizacao",
+        "crescimento"
+      ],
+      "tags": [
+        "operacao",
+        "margem",
+        "caixa"
+      ],
+      "objective": "Comprar melhor e reduzir perdas, para baixar o custo variável.",
+      "why": "Estoque parado é dinheiro parado. Perda e compra mal negociada comem a margem em silêncio.",
+      "impact": 4,
+      "effort": 3,
+      "triggers": [
+        {
+          "signal": "metric:custo_variavel_pct",
+          "op": "gt",
+          "value": 40,
+          "weight": 3
+        },
+        {
+          "signal": "metric:folego_caixa_dias",
+          "op": "lt",
+          "value": 30,
+          "weight": 1
+        }
+      ],
+      "requires": {
+        "bank_statement": true,
+        "team_min": 1
+      },
+      "indicator": {
+        "metric": "custo_variavel_pct",
+        "target": {
+          "type": "delta",
+          "value": -3,
+          "min": 5
+        }
+      },
+      "milestones": [
+        {
+          "code": "m1",
+          "title": "Curva ABC das compras",
+          "week": 2,
+          "evidence": "Lista dos 10 itens que representam a maior parte das compras.",
+          "actions": [
+            {
+              "title": "Listar no Raio-X os maiores fornecedores e itens comprados",
+              "week": 1,
+              "role": "owner",
+              "minutes": 30
+            },
+            {
+              "title": "Identificar os 10 itens que mais pesam nas compras",
+              "week": 2,
+              "role": "owner",
+              "minutes": 30
+            }
+          ]
+        },
+        {
+          "code": "m2",
+          "title": "Cotação e negociação",
+          "week": 5,
+          "evidence": "Três cotações para os 5 principais itens e uma negociação fechada.",
+          "actions": [
+            {
+              "title": "Pedir três cotações para os 5 principais itens",
+              "week": 3,
+              "role": "manager",
+              "minutes": 60
+            },
+            {
+              "title": "Negociar preço ou prazo com o fornecedor principal",
+              "week": 5,
+              "role": "owner",
+              "minutes": 45
+            }
+          ]
+        },
+        {
+          "code": "m3",
+          "title": "Perdas registradas",
+          "week": 8,
+          "evidence": "Perdas, vencimentos e quebras anotados por item.",
+          "actions": [
+            {
+              "title": "Registrar perdas e vencimentos por item toda semana",
+              "week": 6,
+              "role": "member",
+              "minutes": 15
+            },
+            {
+              "title": "Definir estoque mínimo e máximo dos 10 itens principais",
+              "week": 8,
+              "role": "owner",
+              "minutes": 30
+            }
+          ]
+        },
+        {
+          "code": "m4",
+          "title": "Custo variável medido",
+          "week": 12,
+          "evidence": "Custo variável sobre receita recalculado pelo Raio-X.",
+          "actions": [
+            {
+              "title": "Enviar o extrato do mês para recalcular o custo variável",
+              "week": 12,
+              "role": "owner",
+              "minutes": 10
+            }
+          ]
+        }
+      ],
+      "templates": []
+    },
+    {
+      "code": "oe-padrao-servico",
+      "version": 1,
+      "title": "Padrão do serviço principal",
+      "dimension": "operacao_entrega",
+      "stages": [
+        "organizacao",
+        "crescimento"
+      ],
+      "tags": [
+        "operacao",
+        "base"
+      ],
+      "objective": "Documentar o passo a passo do serviço ou produto principal para que qualquer pessoa entregue com qualidade.",
+      "why": "Se só sai certo quando o dono faz, a empresa não cresce e o dono não descansa.",
+      "impact": 4,
+      "effort": 3,
+      "triggers": [
+        {
+          "signal": "dimension:operacao_entrega",
+          "op": "lt",
+          "value": 55,
+          "weight": 2
+        },
+        {
+          "signal": "dimension:pessoas_lideranca",
+          "op": "lt",
+          "value": 50,
+          "weight": 1
+        }
+      ],
+      "requires": {
+        "bank_statement": false,
+        "team_min": 2
+      },
+      "indicator": {
+        "metric": "retrabalho_mes",
+        "target": {
+          "type": "pct_change",
+          "value": -0.3
+        }
+      },
+      "milestones": [
+        {
+          "code": "m1",
+          "title": "Passo a passo escrito",
+          "week": 3,
+          "evidence": "Checklist do serviço principal, com no máximo 15 passos.",
+          "actions": [
+            {
+              "title": "Gravar em áudio ou vídeo como você executa o serviço principal",
+              "week": 1,
+              "role": "owner",
+              "minutes": 30
+            },
+            {
+              "title": "Transformar a gravação num checklist de até 15 passos",
+              "week": 2,
+              "role": "owner",
+              "minutes": 45
+            },
+            {
+              "title": "Validar o checklist com quem executa no dia a dia",
+              "week": 3,
+              "role": "manager",
+              "minutes": 30
+            }
+          ]
+        },
+        {
+          "code": "m2",
+          "title": "Checklist em uso",
+          "week": 6,
+          "evidence": "Checklist preenchido em todas as entregas da semana.",
+          "actions": [
+            {
+              "title": "Usar o checklist em toda entrega por duas semanas",
+              "week": 4,
+              "role": "member",
+              "minutes": 15
+            },
+            {
+              "title": "Ajustar os passos que geraram dúvida",
+              "week": 6,
+              "role": "owner",
+              "minutes": 30
+            }
+          ]
+        },
+        {
+          "code": "m3",
+          "title": "Retrabalho registrado",
+          "week": 8,
+          "evidence": "Todo retrabalho anotado com a causa.",
+          "actions": [
+            {
+              "title": "Registrar cada retrabalho com a causa provável",
+              "week": 7,
+              "role": "member",
+              "minutes": 10
+            }
+          ]
+        },
+        {
+          "code": "m4",
+          "title": "Causas tratadas",
+          "week": 12,
+          "evidence": "As duas causas mais comuns de retrabalho corrigidas no checklist.",
+          "actions": [
+            {
+              "title": "Corrigir no checklist as duas causas mais comuns",
+              "week": 11,
+              "role": "owner",
+              "minutes": 45
+            },
+            {
+              "title": "Registrar no ritual o número de retrabalhos do mês",
+              "week": 12,
+              "role": "owner",
+              "minutes": 5
+            }
+          ]
+        }
+      ],
+      "templates": []
+    },
+    {
+      "code": "oe-prazo-sob-controle",
+      "version": 1,
+      "title": "Prazo sob controle",
+      "dimension": "operacao_entrega",
+      "stages": [
+        "organizacao",
+        "crescimento"
+      ],
+      "tags": [
+        "operacao"
+      ],
+      "objective": "Entregar no prazo combinado e avisar o cliente antes de qualquer atraso.",
+      "why": "Atraso destrói confiança e indicação. Prazo cumprido é a promessa mais simples de marca.",
+      "impact": 3,
+      "effort": 2,
+      "triggers": [
+        {
+          "signal": "dimension:operacao_entrega",
+          "op": "lt",
+          "value": 60,
+          "weight": 2
+        }
+      ],
+      "requires": {
+        "bank_statement": false,
+        "team_min": 1
+      },
+      "indicator": {
+        "metric": "entregas_no_prazo_pct",
+        "target": {
+          "type": "absolute",
+          "value": 90
+        }
+      },
+      "milestones": [
+        {
+          "code": "m1",
+          "title": "Quadro de entregas",
+          "week": 2,
+          "evidence": "Quadro único com todas as entregas em andamento e as datas prometidas.",
+          "actions": [
+            {
+              "title": "Montar o quadro de entregas (a fazer, fazendo, entregue) com as datas",
+              "week": 1,
+              "role": "owner",
+              "minutes": 45
+            },
+            {
+              "title": "Revisar o quadro todo dia em 10 minutos",
+              "week": 2,
+              "role": "manager",
+              "minutes": 10
+            }
+          ]
+        },
+        {
+          "code": "m2",
+          "title": "Prazo realista",
+          "week": 4,
+          "evidence": "Prazo padrão recalculado com base no tempo real das últimas entregas.",
+          "actions": [
+            {
+              "title": "Medir o tempo real das últimas 10 entregas e ajustar o prazo padrão",
+              "week": 3,
+              "role": "owner",
+              "minutes": 30
+            }
+          ]
+        },
+        {
+          "code": "m3",
+          "title": "Aviso antecipado",
+          "week": 6,
+          "evidence": "Regra ativa: risco de atraso é avisado ao cliente com 48 horas de antecedência.",
+          "actions": [
+            {
+              "title": "Combinar com a equipe a regra de aviso antecipado",
+              "week": 5,
+              "role": "owner",
+              "minutes": 20
+            }
+          ]
+        },
+        {
+          "code": "m4",
+          "title": "Pontualidade medida",
+          "week": 12,
+          "evidence": "Percentual de entregas no prazo registrado no mês.",
+          "actions": [
+            {
+              "title": "Registrar o percentual de entregas no prazo",
+              "week": 12,
+              "role": "owner",
+              "minutes": 15
+            }
+          ]
+        }
+      ],
+      "templates": []
+    },
+    {
+      "code": "oe-reclamacao-vira-melhoria",
+      "version": 1,
+      "title": "Reclamação vira melhoria",
+      "dimension": "operacao_entrega",
+      "stages": [
+        "organizacao",
+        "crescimento",
+        "escala"
+      ],
+      "tags": [
+        "operacao",
+        "cliente"
+      ],
+      "objective": "Registrar reclamações, resolver a causa e responder o cliente.",
+      "why": "Cada reclamação é uma consultoria gratuita. Tratada, ela vira fidelidade.",
+      "impact": 3,
+      "effort": 2,
+      "triggers": [
+        {
+          "signal": "dimension:operacao_entrega",
+          "op": "lt",
+          "value": 65,
+          "weight": 1
+        }
+      ],
+      "requires": {
+        "bank_statement": false,
+        "team_min": 1
+      },
+      "indicator": {
+        "metric": "reclamacoes_mes",
+        "target": {
+          "type": "pct_change",
+          "value": -0.4
+        }
+      },
+      "milestones": [
+        {
+          "code": "m1",
+          "title": "Canal de registro",
+          "week": 1,
+          "evidence": "Lista única de reclamações com data, cliente, motivo e solução.",
+          "actions": [
+            {
+              "title": "Criar a lista de reclamações e combinar que toda reclamação entra nela",
+              "week": 1,
+              "role": "owner",
+              "minutes": 20
+            }
+          ]
+        },
+        {
+          "code": "m2",
+          "title": "Resposta padrão",
+          "week": 3,
+          "evidence": "Prazo de resposta definido (24 h) e roteiro de resposta em uso.",
+          "actions": [
+            {
+              "title": "Definir o prazo e o roteiro de resposta a reclamações",
+              "week": 2,
+              "role": "owner",
+              "minutes": 20
+            },
+            {
+              "title": "Responder todas as reclamações abertas",
+              "week": 3,
+              "role": "manager",
+              "minutes": 30
+            }
+          ]
+        },
+        {
+          "code": "m3",
+          "title": "Causas atacadas",
+          "week": 8,
+          "evidence": "Três causas mais frequentes com ação corretiva concluída.",
+          "actions": [
+            {
+              "title": "Agrupar as reclamações por causa e escolher as 3 principais",
+              "week": 6,
+              "role": "owner",
+              "minutes": 30
+            },
+            {
+              "title": "Executar uma correção para cada causa",
+              "week": 8,
+              "role": "owner",
+              "minutes": 60
+            }
+          ]
+        },
+        {
+          "code": "m4",
+          "title": "Reclamações medidas",
+          "week": 12,
+          "evidence": "Número de reclamações do mês registrado.",
+          "actions": [
+            {
+              "title": "Registrar no ritual o número de reclamações do mês",
+              "week": 12,
+              "role": "owner",
+              "minutes": 5
+            }
+          ]
+        }
+      ],
+      "templates": []
+    },
+    {
+      "code": "pl-contratar-certo",
+      "version": 1,
+      "title": "Contratar certo",
+      "dimension": "pessoas_lideranca",
+      "stages": [
+        "crescimento",
+        "escala"
+      ],
+      "tags": [
+        "pessoas",
+        "contratacao"
+      ],
+      "objective": "Contratar com perfil definido, entrevista estruturada e integração nos primeiros 30 dias.",
+      "why": "Contratação errada custa meses de salário e energia da equipe.",
+      "impact": 3,
+      "effort": 3,
+      "triggers": [
+        {
+          "signal": "metric:rotatividade_trimestral_pct",
+          "op": "gt",
+          "value": 10,
+          "weight": 2
+        },
+        {
+          "signal": "dimension:pessoas_lideranca",
+          "op": "lt",
+          "value": 70,
+          "weight": 1
+        }
+      ],
+      "requires": {
+        "bank_statement": false,
+        "team_min": 5
+      },
+      "indicator": {
+        "metric": "rotatividade_trimestral_pct",
+        "target": {
+          "type": "pct_change",
+          "value": -0.3
+        }
+      },
+      "milestones": [
+        {
+          "code": "m1",
+          "title": "Perfil da vaga",
+          "week": 2,
+          "evidence": "Perfil com entregas esperadas, comportamentos e salário.",
+          "actions": [
+            {
+              "title": "Escrever o perfil da vaga a partir do papel definido",
+              "week": 2,
+              "role": "owner",
+              "minutes": 45
+            }
+          ]
+        },
+        {
+          "code": "m2",
+          "title": "Entrevista estruturada",
+          "week": 4,
+          "evidence": "Roteiro com as mesmas perguntas para todos os candidatos.",
+          "actions": [
+            {
+              "title": "Montar o roteiro de entrevista com perguntas sobre situações reais",
+              "week": 3,
+              "role": "owner",
+              "minutes": 45
+            }
+          ]
+        },
+        {
+          "code": "m3",
+          "title": "Integração de 30 dias",
+          "week": 8,
+          "evidence": "Plano de integração com metas para 7, 15 e 30 dias.",
+          "actions": [
+            {
+              "title": "Criar o plano de integração e o padrinho do novo colaborador",
+              "week": 6,
+              "role": "owner",
+              "minutes": 45
+            }
+          ]
+        },
+        {
+          "code": "m4",
+          "title": "Rotatividade medida",
+          "week": 12,
+          "evidence": "Rotatividade do trimestre registrada.",
+          "actions": [
+            {
+              "title": "Registrar desligamentos e a rotatividade do trimestre",
+              "week": 12,
+              "role": "owner",
+              "minutes": 10
+            }
+          ]
+        }
+      ],
+      "templates": []
+    },
+    {
+      "code": "pl-papeis-responsabilidades",
+      "version": 1,
+      "title": "Papéis e responsabilidades",
+      "dimension": "pessoas_lideranca",
+      "stages": [
+        "organizacao",
+        "crescimento",
+        "escala"
+      ],
+      "tags": [
+        "pessoas",
+        "base"
+      ],
+      "objective": "Escrever o que é de cada pessoa, incluindo o dono.",
+      "why": "Quando todo mundo faz tudo, ninguém é dono de nada e tudo volta para o dono.",
+      "impact": 4,
+      "effort": 2,
+      "triggers": [
+        {
+          "signal": "dimension:pessoas_lideranca",
+          "op": "lt",
+          "value": 55,
+          "weight": 2
+        }
+      ],
+      "requires": {
+        "bank_statement": false,
+        "team_min": 2
+      },
+      "indicator": {
+        "metric": "papeis_definidos_pct",
+        "target": {
+          "type": "absolute",
+          "value": 100
+        }
+      },
+      "milestones": [
+        {
+          "code": "m1",
+          "title": "Mapa de atividades",
+          "week": 2,
+          "evidence": "Lista de todas as atividades recorrentes da empresa.",
+          "actions": [
+            {
+              "title": "Listar as atividades recorrentes da empresa (diárias, semanais e mensais)",
+              "week": 1,
+              "role": "owner",
+              "minutes": 45
+            },
+            {
+              "title": "Marcar quem faz cada uma hoje",
+              "week": 2,
+              "role": "owner",
+              "minutes": 30
+            }
+          ]
+        },
+        {
+          "code": "m2",
+          "title": "Matriz de papéis",
+          "week": 4,
+          "evidence": "Cada atividade com um único responsável.",
+          "actions": [
+            {
+              "title": "Definir um único responsável por atividade",
+              "week": 3,
+              "role": "owner",
+              "minutes": 45
+            },
+            {
+              "title": "Escrever o papel de cada pessoa em meia página",
+              "week": 4,
+              "role": "owner",
+              "minutes": 60
+            }
+          ]
+        },
+        {
+          "code": "m3",
+          "title": "Combinado com a equipe",
+          "week": 6,
+          "evidence": "Papéis apresentados e aceitos por todas as pessoas.",
+          "actions": [
+            {
+              "title": "Conversar individualmente com cada pessoa sobre o papel dela",
+              "week": 5,
+              "role": "owner",
+              "minutes": 90
+            },
+            {
+              "title": "Publicar a matriz num lugar visível",
+              "week": 6,
+              "role": "owner",
+              "minutes": 10
+            }
+          ]
+        },
+        {
+          "code": "m4",
+          "title": "Papéis revisados",
+          "week": 12,
+          "evidence": "Revisão feita após 30 dias de uso.",
+          "actions": [
+            {
+              "title": "Revisar os papéis na reunião semanal e ajustar o que não funcionou",
+              "week": 10,
+              "role": "owner",
+              "minutes": 30
+            },
+            {
+              "title": "Registrar o percentual da equipe com papel escrito",
+              "week": 12,
+              "role": "owner",
+              "minutes": 5
+            }
+          ]
+        }
+      ],
+      "templates": []
+    },
+    {
+      "code": "pl-reuniao-semanal",
+      "version": 1,
+      "title": "Reunião semanal de 30 minutos",
+      "dimension": "pessoas_lideranca",
+      "stages": [
+        "organizacao",
+        "crescimento",
+        "escala"
+      ],
+      "tags": [
+        "pessoas",
+        "ritual"
+      ],
+      "objective": "Fazer uma reunião curta, toda semana, com números, prioridades e bloqueios.",
+      "why": "A reunião semanal é o ritual que mantém a equipe no mesmo ritmo do plano.",
+      "impact": 4,
+      "effort": 1,
+      "triggers": [
+        {
+          "signal": "dimension:pessoas_lideranca",
+          "op": "lt",
+          "value": 60,
+          "weight": 1
+        },
+        {
+          "signal": "dimension:direcao_foco",
+          "op": "lt",
+          "value": 60,
+          "weight": 1
+        }
+      ],
+      "requires": {
+        "bank_statement": false,
+        "team_min": 3
+      },
+      "indicator": {
+        "metric": "reunioes_realizadas_pct",
+        "target": {
+          "type": "absolute",
+          "value": 90
+        }
+      },
+      "milestones": [
+        {
+          "code": "m1",
+          "title": "Pauta fixa",
+          "week": 1,
+          "evidence": "Dia, horário e pauta fixos definidos.",
+          "actions": [
+            {
+              "title": "Definir dia e horário fixos e convidar a equipe",
+              "week": 1,
+              "role": "owner",
+              "minutes": 15
+            }
+          ]
+        },
+        {
+          "code": "m2",
+          "title": "Quatro reuniões seguidas",
+          "week": 5,
+          "evidence": "Quatro semanas com reunião realizada no horário.",
+          "actions": [
+            {
+              "title": "Conduzir a reunião usando a pauta e o resumo do ritual da semana",
+              "week": 2,
+              "role": "owner",
+              "minutes": 30
+            }
+          ]
+        },
+        {
+          "code": "m3",
+          "title": "Equipe conduz",
+          "week": 9,
+          "evidence": "Reunião conduzida por outra pessoa pelo menos uma vez.",
+          "actions": [
+            {
+              "title": "Passar a condução para alguém da equipe",
+              "week": 8,
+              "role": "owner",
+              "minutes": 30
+            }
+          ]
+        },
+        {
+          "code": "m4",
+          "title": "Hábito medido",
+          "week": 12,
+          "evidence": "Percentual de reuniões realizadas no ciclo.",
+          "actions": [
+            {
+              "title": "Registrar no ritual se a reunião da semana aconteceu",
+              "week": 12,
+              "role": "owner",
+              "minutes": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "title": "Pauta de 30 minutos",
+          "kind": "roteiro",
+          "body": "1) Números da semana (5 min) 2) Prioridades: feito e próximo (15 min) 3) Bloqueios e quem resolve (8 min) 4) Combinados (2 min)."
+        }
+      ]
+    },
+    {
+      "code": "pl-tirar-dono-do-operacional",
+      "version": 1,
+      "title": "Tirar o dono do operacional",
+      "dimension": "pessoas_lideranca",
+      "stages": [
+        "organizacao",
+        "crescimento",
+        "escala"
+      ],
+      "tags": [
+        "pessoas"
+      ],
+      "objective": "Delegar três rotinas operacionais do dono com padrão e acompanhamento.",
+      "why": "O tempo do dono é o recurso mais escasso da empresa. Cada hora delegada vai para vender, liderar e decidir.",
+      "impact": 4,
+      "effort": 3,
+      "triggers": [
+        {
+          "signal": "dimension:pessoas_lideranca",
+          "op": "lt",
+          "value": 55,
+          "weight": 2
+        },
+        {
+          "signal": "dimension:operacao_entrega",
+          "op": "gte",
+          "value": 40,
+          "weight": 1
+        }
+      ],
+      "requires": {
+        "bank_statement": false,
+        "team_min": 2
+      },
+      "indicator": {
+        "metric": "horas_operacionais_dono_semana",
+        "target": {
+          "type": "pct_change",
+          "value": -0.25
+        }
+      },
+      "milestones": [
+        {
+          "code": "m1",
+          "title": "Agenda do dono medida",
+          "week": 2,
+          "evidence": "Uma semana de agenda registrada, separando operacional e gestão.",
+          "actions": [
+            {
+              "title": "Anotar por uma semana onde vai cada hora do seu dia",
+              "week": 1,
+              "role": "owner",
+              "minutes": 15
+            },
+            {
+              "title": "Escolher 3 rotinas operacionais para delegar",
+              "week": 2,
+              "role": "owner",
+              "minutes": 20
+            }
+          ]
+        },
+        {
+          "code": "m2",
+          "title": "Rotinas documentadas",
+          "week": 4,
+          "evidence": "Passo a passo das 3 rotinas escrito ou gravado.",
+          "actions": [
+            {
+              "title": "Gravar ou escrever o passo a passo das 3 rotinas",
+              "week": 3,
+              "role": "owner",
+              "minutes": 60
+            },
+            {
+              "title": "Escolher quem assume cada rotina",
+              "week": 4,
+              "role": "owner",
+              "minutes": 15
+            }
+          ]
+        },
+        {
+          "code": "m3",
+          "title": "Delegação com acompanhamento",
+          "week": 8,
+          "evidence": "As 3 rotinas executadas pela equipe por 4 semanas.",
+          "actions": [
+            {
+              "title": "Acompanhar as rotinas delegadas sem refazer",
+              "week": 5,
+              "role": "owner",
+              "minutes": 20
+            }
+          ]
+        },
+        {
+          "code": "m4",
+          "title": "Horas recuperadas",
+          "week": 12,
+          "evidence": "Horas operacionais do dono registradas no ritual.",
+          "actions": [
+            {
+              "title": "Registrar no ritual as horas operacionais da semana",
+              "week": 12,
+              "role": "owner",
+              "minutes": 5
+            }
+          ]
+        }
+      ],
+      "templates": []
+    },
+    {
+      "code": "vc-pos-venda-indicacao",
+      "version": 1,
+      "title": "Pós-venda e indicação",
+      "dimension": "vendas_clientes",
+      "stages": [
+        "organizacao",
+        "crescimento",
+        "escala"
+      ],
+      "tags": [
+        "vendas",
+        "marca"
+      ],
+      "objective": "Transformar clientes satisfeitos em avaliações e indicações.",
+      "why": "Indicação é o canal com maior conversão e menor custo para pequenas empresas.",
+      "impact": 3,
+      "effort": 2,
+      "triggers": [
+        {
+          "signal": "dimension:vendas_clientes",
+          "op": "lt",
+          "value": 70,
+          "weight": 1
+        },
+        {
+          "signal": "dimension:marketing_marca",
+          "op": "lt",
+          "value": 55,
+          "weight": 1
+        }
+      ],
+      "requires": {
+        "bank_statement": false,
+        "team_min": 1
+      },
+      "indicator": {
+        "metric": "clientes_indicacao_mes",
+        "target": {
+          "type": "delta",
+          "value": 3
+        }
+      },
+      "milestones": [
+        {
+          "code": "m1",
+          "title": "Roteiro de pós-venda",
+          "week": 2,
+          "evidence": "Mensagem de pós-venda definida para 3 e 30 dias após a compra.",
+          "actions": [
+            {
+              "title": "Escrever as mensagens de pós-venda (3 dias e 30 dias)",
+              "week": 1,
+              "role": "owner",
+              "minutes": 30
+            },
+            {
+              "title": "Definir quem envia e em que momento",
+              "week": 2,
+              "role": "owner",
+              "minutes": 15
+            }
+          ]
+        },
+        {
+          "code": "m2",
+          "title": "Pedido de avaliação",
+          "week": 4,
+          "evidence": "Link de avaliação no Google enviado para os últimos 30 clientes.",
+          "actions": [
+            {
+              "title": "Gerar o link de avaliação do Google Perfil da Empresa",
+              "week": 3,
+              "role": "owner",
+              "minutes": 15
+            },
+            {
+              "title": "Enviar o pedido de avaliação para os clientes satisfeitos",
+              "week": 4,
+              "role": "member",
+              "minutes": 30
+            }
+          ]
+        },
+        {
+          "code": "m3",
+          "title": "Programa de indicação",
+          "week": 7,
+          "evidence": "Benefício de indicação definido e divulgado.",
+          "actions": [
+            {
+              "title": "Definir o benefício para quem indica e para quem é indicado",
+              "week": 5,
+              "role": "owner",
+              "minutes": 30
+            },
+            {
+              "title": "Divulgar o programa nos pós-vendas e no balcão",
+              "week": 7,
+              "role": "owner",
+              "minutes": 20
+            }
+          ]
+        },
+        {
+          "code": "m4",
+          "title": "Indicações medidas",
+          "week": 12,
+          "evidence": "Indicações do mês registradas no ritual.",
+          "actions": [
+            {
+              "title": "Registrar no ritual quantos clientes vieram por indicação",
+              "week": 12,
+              "role": "owner",
+              "minutes": 5
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "title": "Pedido de indicação",
+          "kind": "script",
+          "body": "Que bom que você gostou, {nome}! Se lembrar de alguém que também precise de {serviço}, indica a gente? Quem você indicar ganha {benefício}, e você também."
+        }
+      ]
+    },
+    {
+      "code": "vc-reativar-inativos",
+      "version": 1,
+      "title": "Reativação de clientes inativos",
+      "dimension": "vendas_clientes",
+      "stages": [
+        "sobrevivencia",
+        "organizacao",
+        "crescimento"
+      ],
+      "tags": [
+        "vendas",
+        "caixa"
+      ],
+      "objective": "Trazer de volta clientes que compraram e sumiram nos últimos 12 meses.",
+      "why": "Vender para quem já te conhece custa uma fração de conquistar um cliente novo. É caixa rápido.",
+      "impact": 4,
+      "effort": 2,
+      "triggers": [
+        {
+          "signal": "metric:folego_caixa_dias",
+          "op": "lt",
+          "value": 45,
+          "weight": 1
+        },
+        {
+          "signal": "dimension:vendas_clientes",
+          "op": "lt",
+          "value": 60,
+          "weight": 2
+        }
+      ],
+      "requires": {
+        "bank_statement": false,
+        "team_min": 1
+      },
+      "indicator": {
+        "metric": "clientes_reativados_mes",
+        "target": {
+          "type": "absolute",
+          "value": 10
+        }
+      },
+      "milestones": [
+        {
+          "code": "m1",
+          "title": "Inativos identificados",
+          "week": 2,
+          "evidence": "Lista de clientes sem compra há mais de 90 dias.",
+          "actions": [
+            {
+              "title": "Levantar quem comprou nos últimos 12 meses e não volta há 90 dias",
+              "week": 1,
+              "role": "owner",
+              "minutes": 45
+            },
+            {
+              "title": "Escolher uma oferta de retorno (condição, novidade ou brinde)",
+              "week": 2,
+              "role": "owner",
+              "minutes": 20
+            }
+          ]
+        },
+        {
+          "code": "m2",
+          "title": "Primeira onda de contatos",
+          "week": 4,
+          "evidence": "Mensagem enviada para todos os inativos da lista.",
+          "actions": [
+            {
+              "title": "Enviar a mensagem de retorno para metade da lista",
+              "week": 3,
+              "role": "manager",
+              "minutes": 60
+            },
+            {
+              "title": "Enviar para a outra metade e responder quem retornou",
+              "week": 4,
+              "role": "manager",
+              "minutes": 60
+            }
+          ]
+        },
+        {
+          "code": "m3",
+          "title": "Motivos de saída registrados",
+          "week": 7,
+          "evidence": "Motivos de saída anotados para pelo menos 10 clientes.",
+          "actions": [
+            {
+              "title": "Perguntar aos que não voltaram o motivo, de forma leve",
+              "week": 6,
+              "role": "owner",
+              "minutes": 30
+            },
+            {
+              "title": "Resumir os 3 motivos mais comuns e levar para a reunião",
+              "week": 7,
+              "role": "owner",
+              "minutes": 20
+            }
+          ]
+        },
+        {
+          "code": "m4",
+          "title": "Reativação contínua",
+          "week": 12,
+          "evidence": "Lembrete mensal configurado para clientes que completam 90 dias sem compra.",
+          "actions": [
+            {
+              "title": "Criar a rotina mensal de contato com quem completa 90 dias sem comprar",
+              "week": 10,
+              "role": "owner",
+              "minutes": 30
+            },
+            {
+              "title": "Registrar no ritual quantos clientes voltaram no mês",
+              "week": 12,
+              "role": "owner",
+              "minutes": 5
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "title": "Mensagem de retorno",
+          "kind": "script",
+          "body": "Oi, {nome}! Sentimos sua falta por aqui. Separei {oferta} pensando em você, válida até {data}. Quer que eu reserve?"
+        }
+      ]
+    },
+    {
+      "code": "vc-rotina-comercial",
+      "version": 1,
+      "title": "Rotina comercial semanal",
+      "dimension": "vendas_clientes",
+      "stages": [
+        "organizacao",
+        "crescimento"
+      ],
+      "tags": [
+        "vendas"
+      ],
+      "objective": "Criar uma rotina fixa de contatos comerciais ativos, com meta semanal.",
+      "why": "Empresa que só espera o cliente chegar vive de altos e baixos. Rotina transforma venda em processo.",
+      "impact": 5,
+      "effort": 3,
+      "triggers": [
+        {
+          "signal": "dimension:vendas_clientes",
+          "op": "lt",
+          "value": 55,
+          "weight": 2
+        },
+        {
+          "signal": "metric:concentracao_receita_pct",
+          "op": "gt",
+          "value": 30,
+          "weight": 1
+        }
+      ],
+      "requires": {
+        "bank_statement": false,
+        "team_min": 1
+      },
+      "indicator": {
+        "metric": "contatos_comerciais_semana",
+        "target": {
+          "type": "pct_change",
+          "value": 0.5,
+          "min": 15
+        }
+      },
+      "milestones": [
+        {
+          "code": "m1",
+          "title": "Lista de oportunidades",
+          "week": 2,
+          "evidence": "Lista com pelo menos 50 contatos (clientes, ex-clientes e indicações).",
+          "actions": [
+            {
+              "title": "Exportar contatos do WhatsApp e da agenda para uma lista única",
+              "week": 1,
+              "role": "owner",
+              "minutes": 45
+            },
+            {
+              "title": "Classificar a lista em: cliente ativo, inativo e potencial",
+              "week": 2,
+              "role": "owner",
+              "minutes": 30
+            }
+          ]
+        },
+        {
+          "code": "m2",
+          "title": "Bloco comercial na agenda",
+          "week": 3,
+          "evidence": "Dois blocos fixos de 1 hora por semana reservados para vender.",
+          "actions": [
+            {
+              "title": "Reservar dois blocos fixos na agenda só para contato comercial",
+              "week": 3,
+              "role": "owner",
+              "minutes": 10
+            }
+          ]
+        },
+        {
+          "code": "m3",
+          "title": "Meta semanal batida 4 vezes",
+          "week": 8,
+          "evidence": "Quatro semanas com a meta de contatos atingida, registradas no ritual.",
+          "actions": [
+            {
+              "title": "Fazer os contatos do bloco comercial usando o roteiro",
+              "week": 4,
+              "role": "owner",
+              "minutes": 120
+            },
+            {
+              "title": "Registrar no ritual quantos contatos e quantas vendas saíram",
+              "week": 5,
+              "role": "owner",
+              "minutes": 5
+            }
+          ]
+        },
+        {
+          "code": "m4",
+          "title": "Rotina delegável",
+          "week": 12,
+          "evidence": "Roteiro e lista prontos para outra pessoa assumir parte dos contatos.",
+          "actions": [
+            {
+              "title": "Ensinar a rotina para alguém da equipe",
+              "week": 10,
+              "role": "owner",
+              "minutes": 60
+            },
+            {
+              "title": "Revisar o roteiro com base nas objeções mais comuns",
+              "week": 12,
+              "role": "owner",
+              "minutes": 30
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "title": "Roteiro de contato ativo",
+          "kind": "script",
+          "body": "Oi, {nome}! Aqui é {seu nome}, da {empresa}. Lembrei de você porque {motivo}. Faz sentido eu te mandar {oferta}?"
+        }
+      ]
+    },
+    {
+      "code": "vc-ticket-medio",
+      "version": 1,
+      "title": "Aumentar o ticket médio",
+      "dimension": "vendas_clientes",
+      "stages": [
+        "organizacao",
+        "crescimento",
+        "escala"
+      ],
+      "tags": [
+        "vendas",
+        "margem"
+      ],
+      "objective": "Vender mais para cada cliente com combos, complementos e versões premium.",
+      "why": "Aumentar o ticket aproveita o cliente que já está comprando, sem custo de aquisição.",
+      "impact": 4,
+      "effort": 2,
+      "triggers": [
+        {
+          "signal": "dimension:vendas_clientes",
+          "op": "gte",
+          "value": 40,
+          "weight": 1
+        },
+        {
+          "signal": "metric:margem_bruta_pct",
+          "op": "gte",
+          "value": 30,
+          "weight": 1
+        }
+      ],
+      "requires": {
+        "bank_statement": false,
+        "team_min": 1
+      },
+      "indicator": {
+        "metric": "ticket_medio",
+        "target": {
+          "type": "pct_change",
+          "value": 0.1
+        }
+      },
+      "milestones": [
+        {
+          "code": "m1",
+          "title": "Ticket atual medido",
+          "week": 2,
+          "evidence": "Ticket médio dos últimos 3 meses registrado.",
+          "actions": [
+            {
+              "title": "Calcular o ticket médio: faturamento dividido pelo número de vendas",
+              "week": 1,
+              "role": "owner",
+              "minutes": 20
+            },
+            {
+              "title": "Listar o que os clientes costumam comprar junto",
+              "week": 2,
+              "role": "owner",
+              "minutes": 30
+            }
+          ]
+        },
+        {
+          "code": "m2",
+          "title": "Ofertas desenhadas",
+          "week": 4,
+          "evidence": "Dois combos ou complementos e uma versão premium definidos, com preço calculado.",
+          "actions": [
+            {
+              "title": "Montar 2 combos e 1 versão premium com margem calculada",
+              "week": 3,
+              "role": "owner",
+              "minutes": 60
+            },
+            {
+              "title": "Treinar a equipe para oferecer o complemento em toda venda",
+              "week": 4,
+              "role": "owner",
+              "minutes": 30
+            }
+          ]
+        },
+        {
+          "code": "m3",
+          "title": "Ofertas no ar",
+          "week": 6,
+          "evidence": "Ofertas no catálogo, cardápio ou proposta comercial.",
+          "actions": [
+            {
+              "title": "Incluir as ofertas no catálogo do WhatsApp e no ponto de venda",
+              "week": 6,
+              "role": "owner",
+              "minutes": 30
+            }
+          ]
+        },
+        {
+          "code": "m4",
+          "title": "Resultado medido",
+          "week": 12,
+          "evidence": "Ticket médio do mês registrado e comparado ao início.",
+          "actions": [
+            {
+              "title": "Registrar o ticket médio do mês",
+              "week": 9,
+              "role": "owner",
+              "minutes": 10
+            },
+            {
+              "title": "Manter a oferta que mais vendeu e trocar a pior",
+              "week": 12,
+              "role": "owner",
+              "minutes": 20
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "title": "Frase de oferta complementar",
+          "kind": "script",
+          "body": "A maioria dos clientes que leva {produto} também leva {complemento}. Quer incluir? Fica {preço} no combo."
+        }
+      ]
+    }
+  ]
+}

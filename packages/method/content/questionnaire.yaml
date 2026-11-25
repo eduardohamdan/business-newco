@@ -1,0 +1,172 @@
+# Questionário de maturidade: 20 perguntas, ~3 por dimensão. Linguagem do dono, sem jargão.
+# Cada opção tem score 0–100. O índice da dimensão é a média ponderada das respostas válidas.
+
+# --- Caixa e Finanças -------------------------------------------------------
+- code: cf_separacao
+  dimension: caixa_financas
+  weight: 1.5
+  text: "Você usa a conta da empresa para pagar despesas pessoais?"
+  options:
+    - { value: sempre, label: "Sim, é tudo junto", score: 0 }
+    - { value: as_vezes, label: "Às vezes, quando aperta", score: 40 }
+    - { value: raramente, label: "Raramente", score: 75 }
+    - { value: nunca, label: "Nunca. Tiro um pró-labore fixo", score: 100 }
+- code: cf_controle_caixa
+  dimension: caixa_financas
+  weight: 1.3
+  text: "Como você acompanha entradas e saídas?"
+  options:
+    - { value: saldo_banco, label: "Olho o saldo no banco", score: 10 }
+    - { value: anotacoes, label: "Anoto quando dá", score: 35 }
+    - { value: planilha, label: "Planilha ou sistema atualizado toda semana", score: 75 }
+    - { value: fluxo_projetado, label: "Fluxo de caixa projetado para os próximos 90 dias", score: 100 }
+- code: cf_precificacao
+  dimension: caixa_financas
+  weight: 1.2
+  text: "Como você define o preço dos seus produtos ou serviços?"
+  options:
+    - { value: concorrente, label: "Pelo preço do concorrente", score: 15 }
+    - { value: feeling, label: "No feeling, pela experiência", score: 20 }
+    - { value: custo, label: "Somo o custo e coloco uma margem", score: 60 }
+    - { value: margem, label: "Calculo custo, impostos, taxas e margem desejada", score: 100 }
+- code: cf_precificacao_revisao
+  dimension: caixa_financas
+  text: "Quando foi a última revisão dos seus preços com base nos custos?"
+  show_if: { question: cf_precificacao, in: [custo, margem] }
+  options:
+    - { value: nunca, label: "Nunca revisei", score: 10 }
+    - { value: mais_ano, label: "Há mais de um ano", score: 40 }
+    - { value: semestre, label: "Nos últimos 6 meses", score: 80 }
+    - { value: rotina, label: "Reviso a cada trimestre", score: 100 }
+
+# --- Vendas e Clientes ------------------------------------------------------
+- code: vc_rotina
+  dimension: vendas_clientes
+  weight: 1.4
+  text: "Como as vendas acontecem hoje?"
+  options:
+    - { value: espera, label: "Esperamos o cliente chegar", score: 15 }
+    - { value: dono, label: "O dono vende quando tem tempo", score: 30 }
+    - { value: rotina, label: "Temos uma rotina de contato com clientes", score: 75 }
+    - { value: metas, label: "Rotina com metas e acompanhamento semanal", score: 100 }
+- code: vc_base_clientes
+  dimension: vendas_clientes
+  text: "Você tem uma lista organizada dos seus clientes (nome, contato, última compra)?"
+  options:
+    - { value: nao, label: "Não", score: 0 }
+    - { value: whatsapp, label: "Só no WhatsApp", score: 30 }
+    - { value: planilha, label: "Em planilha ou sistema, desatualizada", score: 55 }
+    - { value: atualizada, label: "Sim, atualizada e usada para vender de novo", score: 100 }
+- code: vc_posvenda
+  dimension: vendas_clientes
+  text: "Depois da venda, o que acontece?"
+  options:
+    - { value: nada, label: "Nada, só se o cliente voltar", score: 10 }
+    - { value: as_vezes, label: "Às vezes mandamos uma mensagem", score: 40 }
+    - { value: sempre, label: "Sempre fazemos contato e pedimos avaliação ou indicação", score: 100 }
+- code: vc_metas
+  dimension: vendas_clientes
+  text: "A empresa tem meta de faturamento mensal?"
+  options:
+    - { value: nao, label: "Não", score: 0 }
+    - { value: cabeca, label: "Só na minha cabeça", score: 30 }
+    - { value: escrita, label: "Escrita, mas não acompanhamos", score: 55 }
+    - { value: acompanhada, label: "Escrita e acompanhada toda semana", score: 100 }
+
+# --- Marketing e Marca ------------------------------------------------------
+- code: mm_origem
+  dimension: marketing_marca
+  text: "Você sabe de onde vêm seus novos clientes?"
+  options:
+    - { value: nao, label: "Não faço ideia", score: 0 }
+    - { value: impressao, label: "Tenho uma impressão", score: 35 }
+    - { value: medido, label: "Sim, anotamos a origem de cada cliente", score: 100 }
+- code: mm_presenca
+  dimension: marketing_marca
+  text: "Como está a presença da empresa na internet (Google, redes, WhatsApp Business)?"
+  options:
+    - { value: nenhuma, label: "Praticamente não existe", score: 0 }
+    - { value: basica, label: "Tem perfil, mas parado", score: 30 }
+    - { value: ativa, label: "Postamos com frequência", score: 65 }
+    - { value: gera_clientes, label: "Gera clientes todo mês e medimos isso", score: 100 }
+- code: mm_whatsapp
+  dimension: marketing_marca
+  text: "Quando um interessado chama no WhatsApp, como é o atendimento?"
+  options:
+    - { value: demora, label: "Respondemos quando dá", score: 10 }
+    - { value: rapido, label: "Respondemos rápido, sem roteiro", score: 45 }
+    - { value: roteiro, label: "Temos roteiro, catálogo e acompanhamos quem não fechou", score: 100 }
+
+# --- Operação e Entrega -----------------------------------------------------
+- code: oe_padrao
+  dimension: operacao_entrega
+  weight: 1.2
+  text: "O serviço ou produto principal é feito sempre do mesmo jeito, por qualquer pessoa da equipe?"
+  options:
+    - { value: dono, label: "Só sai certo se eu fizer", score: 10 }
+    - { value: depende, label: "Depende de quem faz", score: 35 }
+    - { value: checklist, label: "Temos um passo a passo ou checklist", score: 80 }
+    - { value: medido, label: "Temos padrão e medimos a qualidade", score: 100 }
+- code: oe_prazo
+  dimension: operacao_entrega
+  text: "Com que frequência vocês atrasam entregas?"
+  options:
+    - { value: frequente, label: "Com frequência", score: 10 }
+    - { value: as_vezes, label: "Às vezes", score: 50 }
+    - { value: raro, label: "Raramente, e avisamos antes", score: 100 }
+- code: oe_reclamacoes
+  dimension: operacao_entrega
+  text: "O que acontece com as reclamações dos clientes?"
+  options:
+    - { value: nada, label: "Resolvemos na hora e esquecemos", score: 20 }
+    - { value: anotamos, label: "Anotamos algumas", score: 50 }
+    - { value: melhoria, label: "Registramos e corrigimos a causa", score: 100 }
+
+# --- Pessoas e Liderança ----------------------------------------------------
+- code: pl_papeis
+  dimension: pessoas_lideranca
+  weight: 1.2
+  text: "Cada pessoa da equipe sabe exatamente pelo que é responsável?"
+  options:
+    - { value: nao, label: "Não, todo mundo faz de tudo", score: 10 }
+    - { value: informal, label: "Mais ou menos, de forma informal", score: 45 }
+    - { value: escrito, label: "Sim, está escrito e combinado", score: 100 }
+- code: pl_reuniao
+  dimension: pessoas_lideranca
+  text: "Vocês fazem reunião de equipe com frequência?"
+  options:
+    - { value: nunca, label: "Nunca ou só quando dá problema", score: 0 }
+    - { value: as_vezes, label: "Às vezes", score: 40 }
+    - { value: semanal, label: "Toda semana, curta e com pauta", score: 100 }
+- code: pl_dono_operacional
+  dimension: pessoas_lideranca
+  text: "Quanto do seu tempo vai para tarefas operacionais que outra pessoa poderia fazer?"
+  options:
+    - { value: quase_tudo, label: "Quase todo o tempo", score: 10 }
+    - { value: metade, label: "Mais ou menos metade", score: 45 }
+    - { value: pouco, label: "Pouco. Foco em vender, liderar e decidir", score: 100 }
+
+# --- Direção e Foco ---------------------------------------------------------
+- code: df_direcao
+  dimension: direcao_foco
+  weight: 1.2
+  text: "Você tem claro onde quer que a empresa esteja daqui a 12 meses?"
+  options:
+    - { value: nao, label: "Não paro para pensar nisso", score: 0 }
+    - { value: cabeca, label: "Tenho uma ideia na cabeça", score: 35 }
+    - { value: escrito, label: "Está escrito, com metas", score: 80 }
+    - { value: compartilhado, label: "Escrito, com metas, e a equipe conhece", score: 100 }
+- code: df_prioridades
+  dimension: direcao_foco
+  text: "Quantas iniciativas importantes você está tocando ao mesmo tempo?"
+  options:
+    - { value: muitas, label: "Muitas, perdi a conta", score: 10 }
+    - { value: varias, label: "De 4 a 6", score: 40 }
+    - { value: poucas, label: "No máximo 3, e eu sei quais são", score: 100 }
+- code: df_numeros
+  dimension: direcao_foco
+  text: "Quais números da empresa você olha toda semana?"
+  options:
+    - { value: nenhum, label: "Só o saldo do banco", score: 10 }
+    - { value: vendas, label: "Vendas da semana", score: 45 }
+    - { value: painel, label: "Um painel com caixa, vendas e indicadores principais", score: 100 }

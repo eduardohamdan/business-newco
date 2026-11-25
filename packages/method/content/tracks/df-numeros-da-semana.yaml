@@ -1,0 +1,42 @@
+code: df-numeros-da-semana
+version: 1
+title: "Os 5 números da semana"
+dimension: direcao_foco
+stages: [sobrevivencia, organizacao, crescimento, escala]
+tags: [direcao, base]
+objective: "Escolher e acompanhar toda semana os 5 números que mostram a saúde da empresa."
+why: "Quem só olha o saldo do banco descobre os problemas tarde demais."
+impact: 4
+effort: 1
+triggers:
+  - { signal: "dimension:direcao_foco", op: lt, value: 55, weight: 2 }
+  - { signal: "dimension:caixa_financas", op: lt, value: 55, weight: 1 }
+requires: { bank_statement: false, team_min: 1 }
+indicator:
+  metric: indicadores_atualizados_pct
+  target: { type: absolute, value: 100 }
+milestones:
+  - code: m1
+    title: "Números escolhidos"
+    week: 1
+    evidence: "Cinco indicadores escolhidos no painel do app, com meta."
+    actions:
+      - { title: "Escolher no painel os 5 números da semana (caixa, vendas e um por prioridade)", week: 1, minutes: 20 }
+  - code: m2
+    title: "Primeiras 4 semanas"
+    week: 5
+    evidence: "Quatro semanas com os números atualizados no ritual."
+    actions:
+      - { title: "Atualizar os números no ritual semanal", week: 2, minutes: 5 }
+  - code: m3
+    title: "Decisão pelos números"
+    week: 8
+    evidence: "Uma decisão registrada a partir de um número fora da meta."
+    actions:
+      - { title: "Escolher um número fora da meta e decidir uma ação", week: 8, minutes: 20 }
+  - code: m4
+    title: "Hábito consolidado"
+    week: 12
+    evidence: "Números atualizados em pelo menos 10 das 12 semanas."
+    actions:
+      - { title: "Revisar se os 5 números ainda são os certos para o próximo ciclo", week: 12, minutes: 20 }

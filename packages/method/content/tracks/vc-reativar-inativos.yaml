@@ -1,0 +1,50 @@
+code: vc-reativar-inativos
+version: 1
+title: "Reativação de clientes inativos"
+dimension: vendas_clientes
+stages: [sobrevivencia, organizacao, crescimento]
+tags: [vendas, caixa]
+objective: "Trazer de volta clientes que compraram e sumiram nos últimos 12 meses."
+why: "Vender para quem já te conhece custa uma fração de conquistar um cliente novo. É caixa rápido."
+impact: 4
+effort: 2
+triggers:
+  - { signal: "metric:folego_caixa_dias", op: lt, value: 45, weight: 1 }
+  - { signal: "dimension:vendas_clientes", op: lt, value: 60, weight: 2 }
+requires: { bank_statement: false, team_min: 1 }
+indicator:
+  metric: clientes_reativados_mes
+  target: { type: absolute, value: 10 }
+milestones:
+  - code: m1
+    title: "Inativos identificados"
+    week: 2
+    evidence: "Lista de clientes sem compra há mais de 90 dias."
+    actions:
+      - { title: "Levantar quem comprou nos últimos 12 meses e não volta há 90 dias", week: 1, minutes: 45 }
+      - { title: "Escolher uma oferta de retorno (condição, novidade ou brinde)", week: 2, minutes: 20 }
+  - code: m2
+    title: "Primeira onda de contatos"
+    week: 4
+    evidence: "Mensagem enviada para todos os inativos da lista."
+    actions:
+      - { title: "Enviar a mensagem de retorno para metade da lista", week: 3, minutes: 60, role: manager }
+      - { title: "Enviar para a outra metade e responder quem retornou", week: 4, minutes: 60, role: manager }
+  - code: m3
+    title: "Motivos de saída registrados"
+    week: 7
+    evidence: "Motivos de saída anotados para pelo menos 10 clientes."
+    actions:
+      - { title: "Perguntar aos que não voltaram o motivo, de forma leve", week: 6, minutes: 30 }
+      - { title: "Resumir os 3 motivos mais comuns e levar para a reunião", week: 7, minutes: 20 }
+  - code: m4
+    title: "Reativação contínua"
+    week: 12
+    evidence: "Lembrete mensal configurado para clientes que completam 90 dias sem compra."
+    actions:
+      - { title: "Criar a rotina mensal de contato com quem completa 90 dias sem comprar", week: 10, minutes: 30 }
+      - { title: "Registrar no ritual quantos clientes voltaram no mês", week: 12, minutes: 5 }
+templates:
+  - title: "Mensagem de retorno"
+    kind: script
+    body: "Oi, {nome}! Sentimos sua falta por aqui. Separei {oferta} pensando em você, válida até {data}. Quer que eu reserve?"

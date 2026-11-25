@@ -1,0 +1,63 @@
+# Manifesto do método. Toda mudança aqui exige nova `version` e passa pelo conjunto de avaliação.
+version: "2026.11-v0"
+name: "Método de Evolução Empresarial"
+
+limits:
+  max_priorities: 3
+  max_priorities_per_dimension: 2
+  min_coverage_for_diagnosis: 0.6   # fração de sinais essenciais disponíveis
+  confidence_high: 0.80
+  confidence_moderate: 0.65
+  cycle_weeks: 13                   # semana 0 (diagnóstico) + 12 de execução
+
+# Estágios em ordem. O primeiro cuja regra casar define o estágio. O último é o padrão.
+stages:
+  - code: sobrevivencia
+    order: 1
+    name: Sobrevivência
+    description: O caixa manda na empresa. Falta previsibilidade e as contas pessoais se misturam com as da empresa.
+    focus: Caixa, preço, cobrança e separação PF/PJ.
+    blocked_track_tags: [expansao, contratacao]
+    rule:
+      mode: any
+      conditions:
+        - { signal: "metric:folego_caixa_dias", op: lt, value: 15 }
+        - { signal: "metric:meses_caixa_negativo", op: gte, value: 2 }
+        - { signal: "metric:despesas_pessoais_pj_pct", op: gt, value: 10 }
+        - { signal: "dimension:caixa_financas", op: lt, value: 35 }
+  - code: organizacao
+    order: 2
+    name: Organização
+    description: O caixa está estável, mas tudo depende do dono. Faltam rotina, metas e processo.
+    focus: Rotina comercial, processo do serviço principal e metas.
+    blocked_track_tags: [expansao]
+    rule:
+      mode: any
+      conditions:
+        - { signal: "maturity:avg", op: lt, value: 50 }
+        - { signal: "dimension:direcao_foco", op: lt, value: 45 }
+        - { signal: "dimension:pessoas_lideranca", op: lt, value: 40 }
+  - code: crescimento
+    order: 3
+    name: Crescimento
+    description: Existe demanda consistente. O gargalo é capacidade, time ou margem.
+    focus: Vendas previsíveis, margem, papéis e contratação.
+    blocked_track_tags: []
+    rule:
+      mode: any
+      conditions:
+        - { signal: "maturity:avg", op: lt, value: 72 }
+  - code: escala
+    order: 4
+    name: Escala
+    description: A empresa é gerida por indicadores e tem liderança intermediária.
+    focus: Delegação, governança e novos canais.
+    blocked_track_tags: []
+
+dimensions:
+  - { code: caixa_financas, name: "Caixa e Finanças", question: "O dinheiro sobra, e eu sei por quê?", weight: 1.3 }
+  - { code: vendas_clientes, name: "Vendas e Clientes", question: "Eu vendo com previsibilidade?", weight: 1.2 }
+  - { code: marketing_marca, name: "Marketing e Marca", question: "As pessoas certas me encontram?", weight: 0.8 }
+  - { code: operacao_entrega, name: "Operação e Entrega", question: "Eu entrego com qualidade sem depender de mim?", weight: 1.0 }
+  - { code: pessoas_lideranca, name: "Pessoas e Liderança", question: "Cada um sabe o que é seu?", weight: 0.9 }
+  - { code: direcao_foco, name: "Direção e Foco", question: "Eu sei para onde estou indo?", weight: 0.8 }

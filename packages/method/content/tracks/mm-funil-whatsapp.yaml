@@ -1,0 +1,47 @@
+code: mm-funil-whatsapp
+version: 1
+title: "Funil de vendas no WhatsApp"
+dimension: marketing_marca
+stages: [organizacao, crescimento]
+tags: [vendas, marketing]
+objective: "Organizar o atendimento no WhatsApp para não perder interessados."
+why: "Boa parte das vendas de pequenas empresas começa e morre no WhatsApp, sem resposta ou sem acompanhamento."
+impact: 4
+effort: 2
+triggers:
+  - { signal: "dimension:marketing_marca", op: lt, value: 60, weight: 2 }
+  - { signal: "dimension:vendas_clientes", op: lt, value: 60, weight: 1 }
+requires: { bank_statement: false, team_min: 1 }
+indicator:
+  metric: conversao_whatsapp_pct
+  target: { type: delta, value: 5, min: 10 }
+milestones:
+  - code: m1
+    title: "WhatsApp Business configurado"
+    week: 1
+    evidence: "Perfil comercial, catálogo, mensagem de boas-vindas e respostas rápidas configurados."
+    actions:
+      - { title: "Configurar perfil, catálogo e respostas rápidas no WhatsApp Business", week: 1, minutes: 60 }
+  - code: m2
+    title: "Etiquetas de funil"
+    week: 2
+    evidence: "Etiquetas em uso: novo contato, orçamento enviado, negociando, fechado, perdido."
+    actions:
+      - { title: "Criar as etiquetas do funil e marcar as conversas da última semana", week: 2, minutes: 30 }
+  - code: m3
+    title: "Acompanhamento de quem não fechou"
+    week: 5
+    evidence: "Toda conversa em 'orçamento enviado' recebe retorno em até 48 horas."
+    actions:
+      - { title: "Fazer o retorno de todos os orçamentos sem resposta", week: 3, minutes: 30, role: member }
+      - { title: "Registrar no ritual quantas conversas viraram venda", week: 5, minutes: 5 }
+  - code: m4
+    title: "Conversão medida"
+    week: 12
+    evidence: "Taxa de conversão do mês registrada."
+    actions:
+      - { title: "Calcular a conversão: vendas divididas por conversas comerciais do mês", week: 12, minutes: 20 }
+templates:
+  - title: "Retorno de orçamento"
+    kind: script
+    body: "Oi, {nome}! Conseguiu ver o orçamento que te mandei? Se quiser, ajusto alguma coisa para caber melhor para você."

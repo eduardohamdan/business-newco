@@ -1,0 +1,46 @@
+code: oe-padrao-servico
+version: 1
+title: "Padrão do serviço principal"
+dimension: operacao_entrega
+stages: [organizacao, crescimento]
+tags: [operacao, base]
+objective: "Documentar o passo a passo do serviço ou produto principal para que qualquer pessoa entregue com qualidade."
+why: "Se só sai certo quando o dono faz, a empresa não cresce e o dono não descansa."
+impact: 4
+effort: 3
+triggers:
+  - { signal: "dimension:operacao_entrega", op: lt, value: 55, weight: 2 }
+  - { signal: "dimension:pessoas_lideranca", op: lt, value: 50, weight: 1 }
+requires: { bank_statement: false, team_min: 2 }
+indicator:
+  metric: retrabalho_mes
+  target: { type: pct_change, value: -0.3 }
+milestones:
+  - code: m1
+    title: "Passo a passo escrito"
+    week: 3
+    evidence: "Checklist do serviço principal, com no máximo 15 passos."
+    actions:
+      - { title: "Gravar em áudio ou vídeo como você executa o serviço principal", week: 1, minutes: 30 }
+      - { title: "Transformar a gravação num checklist de até 15 passos", week: 2, minutes: 45 }
+      - { title: "Validar o checklist com quem executa no dia a dia", week: 3, minutes: 30, role: manager }
+  - code: m2
+    title: "Checklist em uso"
+    week: 6
+    evidence: "Checklist preenchido em todas as entregas da semana."
+    actions:
+      - { title: "Usar o checklist em toda entrega por duas semanas", week: 4, minutes: 15, role: member }
+      - { title: "Ajustar os passos que geraram dúvida", week: 6, minutes: 30 }
+  - code: m3
+    title: "Retrabalho registrado"
+    week: 8
+    evidence: "Todo retrabalho anotado com a causa."
+    actions:
+      - { title: "Registrar cada retrabalho com a causa provável", week: 7, minutes: 10, role: member }
+  - code: m4
+    title: "Causas tratadas"
+    week: 12
+    evidence: "As duas causas mais comuns de retrabalho corrigidas no checklist."
+    actions:
+      - { title: "Corrigir no checklist as duas causas mais comuns", week: 11, minutes: 45 }
+      - { title: "Registrar no ritual o número de retrabalhos do mês", week: 12, minutes: 5 }

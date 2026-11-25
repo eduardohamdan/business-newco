@@ -1,0 +1,42 @@
+code: df-governanca-socios
+version: 1
+title: "Combinados entre sócios"
+dimension: direcao_foco
+stages: [crescimento, escala]
+tags: [direcao, governanca]
+objective: "Formalizar papéis, retiradas e uma reunião mensal de resultado entre sócios."
+why: "Desalinhamento entre sócios é uma das causas mais caras de crise em pequenas empresas."
+impact: 3
+effort: 3
+triggers:
+  - { signal: "dimension:direcao_foco", op: lt, value: 70, weight: 1 }
+  - { signal: "maturity:avg", op: gte, value: 55, weight: 1 }
+requires: { bank_statement: false, team_min: 3 }
+indicator:
+  metric: reunioes_socios_pct
+  target: { type: absolute, value: 100 }
+milestones:
+  - code: m1
+    title: "Papéis dos sócios"
+    week: 2
+    evidence: "Responsabilidades de cada sócio escritas."
+    actions:
+      - { title: "Escrever as responsabilidades e a dedicação de cada sócio", week: 2, minutes: 45 }
+  - code: m2
+    title: "Regras de retirada"
+    week: 4
+    evidence: "Pró-labore e regra de distribuição de lucro combinados."
+    actions:
+      - { title: "Combinar pró-labore e regra de distribuição de lucro com o contador", week: 4, minutes: 60 }
+  - code: m3
+    title: "Reunião mensal"
+    week: 8
+    evidence: "Duas reuniões mensais de resultado realizadas, com ata curta."
+    actions:
+      - { title: "Fazer a reunião mensal de resultado com os números do painel", week: 5, minutes: 60 }
+  - code: m4
+    title: "Acordo formal"
+    week: 12
+    evidence: "Pontos para o acordo de sócios levados ao advogado."
+    actions:
+      - { title: "Listar os pontos para um acordo de sócios e agendar com o advogado", week: 12, minutes: 30 }

@@ -1,0 +1,51 @@
+code: cf-folego-30-dias
+version: 1
+title: "Fôlego de caixa de 30 dias"
+dimension: caixa_financas
+stages: [sobrevivencia, organizacao, crescimento]
+tags: [caixa]
+objective: "Construir uma reserva equivalente a 30 dias de saídas."
+why: "Sem reserva, qualquer imprevisto vira empréstimo caro ou noite sem dormir."
+impact: 5
+effort: 3
+triggers:
+  - { signal: "metric:folego_caixa_dias", op: lt, value: 30, weight: 3 }
+  - { signal: "metric:tarifas_bancarias_pct", op: gt, value: 2, weight: 1 }
+requires: { bank_statement: true, team_min: 1 }
+indicator:
+  metric: folego_caixa_dias
+  target: { type: absolute, value: 30 }
+milestones:
+  - code: m1
+    title: "Saídas mapeadas"
+    week: 2
+    evidence: "Lista das saídas fixas e variáveis do mês, vinda do Raio-X."
+    actions:
+      - { title: "Revisar no Raio-X as 10 maiores saídas do mês", week: 1, minutes: 30 }
+      - { title: "Marcar o que é corte possível, renegociação ou manutenção", week: 2, minutes: 30 }
+  - code: m2
+    title: "Cortes e renegociações"
+    week: 5
+    evidence: "Pelo menos 3 despesas cortadas ou renegociadas, com valor economizado."
+    actions:
+      - { title: "Cancelar assinaturas e serviços sem uso", week: 3, minutes: 30 }
+      - { title: "Renegociar tarifas bancárias e juros", week: 4, minutes: 45 }
+      - { title: "Renegociar prazo com 2 fornecedores", week: 5, minutes: 45 }
+  - code: m3
+    title: "Reserva automática"
+    week: 6
+    evidence: "Transferência fixa semanal ou mensal para uma aplicação de liquidez diária."
+    actions:
+      - { title: "Abrir aplicação de liquidez diária no nome da empresa", week: 6, minutes: 20 }
+      - { title: "Programar a transferência de um percentual de toda entrada", week: 6, minutes: 15 }
+  - code: m4
+    title: "Fôlego acompanhado"
+    week: 12
+    evidence: "Fôlego de caixa medido pelo Raio-X a cada mês."
+    actions:
+      - { title: "Enviar o extrato do mês para recalcular o fôlego", week: 8, minutes: 10 }
+      - { title: "Enviar o extrato do mês para recalcular o fôlego", week: 12, minutes: 10 }
+templates:
+  - title: "Regra da reserva"
+    kind: modelo
+    body: "Separe de 5% a 10% de toda entrada para a reserva até atingir 30 dias de saídas médias."

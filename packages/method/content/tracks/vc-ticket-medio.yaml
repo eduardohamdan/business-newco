@@ -1,0 +1,49 @@
+code: vc-ticket-medio
+version: 1
+title: "Aumentar o ticket médio"
+dimension: vendas_clientes
+stages: [organizacao, crescimento, escala]
+tags: [vendas, margem]
+objective: "Vender mais para cada cliente com combos, complementos e versões premium."
+why: "Aumentar o ticket aproveita o cliente que já está comprando, sem custo de aquisição."
+impact: 4
+effort: 2
+triggers:
+  - { signal: "dimension:vendas_clientes", op: gte, value: 40, weight: 1 }
+  - { signal: "metric:margem_bruta_pct", op: gte, value: 30, weight: 1 }
+requires: { bank_statement: false, team_min: 1 }
+indicator:
+  metric: ticket_medio
+  target: { type: pct_change, value: 0.1 }
+milestones:
+  - code: m1
+    title: "Ticket atual medido"
+    week: 2
+    evidence: "Ticket médio dos últimos 3 meses registrado."
+    actions:
+      - { title: "Calcular o ticket médio: faturamento dividido pelo número de vendas", week: 1, minutes: 20 }
+      - { title: "Listar o que os clientes costumam comprar junto", week: 2, minutes: 30 }
+  - code: m2
+    title: "Ofertas desenhadas"
+    week: 4
+    evidence: "Dois combos ou complementos e uma versão premium definidos, com preço calculado."
+    actions:
+      - { title: "Montar 2 combos e 1 versão premium com margem calculada", week: 3, minutes: 60 }
+      - { title: "Treinar a equipe para oferecer o complemento em toda venda", week: 4, minutes: 30 }
+  - code: m3
+    title: "Ofertas no ar"
+    week: 6
+    evidence: "Ofertas no catálogo, cardápio ou proposta comercial."
+    actions:
+      - { title: "Incluir as ofertas no catálogo do WhatsApp e no ponto de venda", week: 6, minutes: 30 }
+  - code: m4
+    title: "Resultado medido"
+    week: 12
+    evidence: "Ticket médio do mês registrado e comparado ao início."
+    actions:
+      - { title: "Registrar o ticket médio do mês", week: 9, minutes: 10 }
+      - { title: "Manter a oferta que mais vendeu e trocar a pior", week: 12, minutes: 20 }
+templates:
+  - title: "Frase de oferta complementar"
+    kind: script
+    body: "A maioria dos clientes que leva {produto} também leva {complemento}. Quer incluir? Fica {preço} no combo."

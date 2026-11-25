@@ -1,0 +1,46 @@
+code: pl-reuniao-semanal
+version: 1
+title: "Reunião semanal de 30 minutos"
+dimension: pessoas_lideranca
+stages: [organizacao, crescimento, escala]
+tags: [pessoas, ritual]
+objective: "Fazer uma reunião curta, toda semana, com números, prioridades e bloqueios."
+why: "A reunião semanal é o ritual que mantém a equipe no mesmo ritmo do plano."
+impact: 4
+effort: 1
+triggers:
+  - { signal: "dimension:pessoas_lideranca", op: lt, value: 60, weight: 1 }
+  - { signal: "dimension:direcao_foco", op: lt, value: 60, weight: 1 }
+requires: { bank_statement: false, team_min: 3 }
+indicator:
+  metric: reunioes_realizadas_pct
+  target: { type: absolute, value: 90 }
+milestones:
+  - code: m1
+    title: "Pauta fixa"
+    week: 1
+    evidence: "Dia, horário e pauta fixos definidos."
+    actions:
+      - { title: "Definir dia e horário fixos e convidar a equipe", week: 1, minutes: 15 }
+  - code: m2
+    title: "Quatro reuniões seguidas"
+    week: 5
+    evidence: "Quatro semanas com reunião realizada no horário."
+    actions:
+      - { title: "Conduzir a reunião usando a pauta e o resumo do ritual da semana", week: 2, minutes: 30 }
+  - code: m3
+    title: "Equipe conduz"
+    week: 9
+    evidence: "Reunião conduzida por outra pessoa pelo menos uma vez."
+    actions:
+      - { title: "Passar a condução para alguém da equipe", week: 8, minutes: 30 }
+  - code: m4
+    title: "Hábito medido"
+    week: 12
+    evidence: "Percentual de reuniões realizadas no ciclo."
+    actions:
+      - { title: "Registrar no ritual se a reunião da semana aconteceu", week: 12, minutes: 2 }
+templates:
+  - title: "Pauta de 30 minutos"
+    kind: roteiro
+    body: "1) Números da semana (5 min) 2) Prioridades: feito e próximo (15 min) 3) Bloqueios e quem resolve (8 min) 4) Combinados (2 min)."

@@ -1,0 +1,30 @@
+{
+  "name": "business-evolution-os",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Sistema de evolução empresarial com IA para micro e pequenas empresas (MVP).",
+  "packageManager": "pnpm@10.28.0",
+  "engines": { "node": ">=22" },
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm --filter @beos/web dev",
+    "dev:worker": "pnpm --filter @beos/worker dev",
+    "build": "pnpm --filter @beos/web build",
+    "typecheck": "pnpm -r --parallel typecheck",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:db": "vitest run --project db",
+    "db:migrate": "pnpm --filter @beos/db migrate",
+    "db:seed": "pnpm --filter @beos/db seed",
+    "method:validate": "pnpm --filter @beos/method validate",
+    "evals": "pnpm --filter @beos/ai evals",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "prettier": "^3.6.0",
+    "tsx": "^4.20.0",
+    "typescript": "~5.9.3",
+    "vitest": "^3.2.0"
+  }
+}

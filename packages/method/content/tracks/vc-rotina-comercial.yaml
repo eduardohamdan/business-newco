@@ -1,0 +1,49 @@
+code: vc-rotina-comercial
+version: 1
+title: "Rotina comercial semanal"
+dimension: vendas_clientes
+stages: [organizacao, crescimento]
+tags: [vendas]
+objective: "Criar uma rotina fixa de contatos comerciais ativos, com meta semanal."
+why: "Empresa que só espera o cliente chegar vive de altos e baixos. Rotina transforma venda em processo."
+impact: 5
+effort: 3
+triggers:
+  - { signal: "dimension:vendas_clientes", op: lt, value: 55, weight: 2 }
+  - { signal: "metric:concentracao_receita_pct", op: gt, value: 30, weight: 1 }
+requires: { bank_statement: false, team_min: 1 }
+indicator:
+  metric: contatos_comerciais_semana
+  target: { type: pct_change, value: 0.5, min: 15 }
+milestones:
+  - code: m1
+    title: "Lista de oportunidades"
+    week: 2
+    evidence: "Lista com pelo menos 50 contatos (clientes, ex-clientes e indicações)."
+    actions:
+      - { title: "Exportar contatos do WhatsApp e da agenda para uma lista única", week: 1, minutes: 45 }
+      - { title: "Classificar a lista em: cliente ativo, inativo e potencial", week: 2, minutes: 30 }
+  - code: m2
+    title: "Bloco comercial na agenda"
+    week: 3
+    evidence: "Dois blocos fixos de 1 hora por semana reservados para vender."
+    actions:
+      - { title: "Reservar dois blocos fixos na agenda só para contato comercial", week: 3, minutes: 10 }
+  - code: m3
+    title: "Meta semanal batida 4 vezes"
+    week: 8
+    evidence: "Quatro semanas com a meta de contatos atingida, registradas no ritual."
+    actions:
+      - { title: "Fazer os contatos do bloco comercial usando o roteiro", week: 4, minutes: 120 }
+      - { title: "Registrar no ritual quantos contatos e quantas vendas saíram", week: 5, minutes: 5 }
+  - code: m4
+    title: "Rotina delegável"
+    week: 12
+    evidence: "Roteiro e lista prontos para outra pessoa assumir parte dos contatos."
+    actions:
+      - { title: "Ensinar a rotina para alguém da equipe", week: 10, minutes: 60 }
+      - { title: "Revisar o roteiro com base nas objeções mais comuns", week: 12, minutes: 30 }
+templates:
+  - title: "Roteiro de contato ativo"
+    kind: script
+    body: "Oi, {nome}! Aqui é {seu nome}, da {empresa}. Lembrei de você porque {motivo}. Faz sentido eu te mandar {oferta}?"

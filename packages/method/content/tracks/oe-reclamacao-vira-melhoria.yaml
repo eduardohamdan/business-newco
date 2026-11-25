@@ -1,0 +1,43 @@
+code: oe-reclamacao-vira-melhoria
+version: 1
+title: "Reclamação vira melhoria"
+dimension: operacao_entrega
+stages: [organizacao, crescimento, escala]
+tags: [operacao, cliente]
+objective: "Registrar reclamações, resolver a causa e responder o cliente."
+why: "Cada reclamação é uma consultoria gratuita. Tratada, ela vira fidelidade."
+impact: 3
+effort: 2
+triggers:
+  - { signal: "dimension:operacao_entrega", op: lt, value: 65, weight: 1 }
+requires: { bank_statement: false, team_min: 1 }
+indicator:
+  metric: reclamacoes_mes
+  target: { type: pct_change, value: -0.4 }
+milestones:
+  - code: m1
+    title: "Canal de registro"
+    week: 1
+    evidence: "Lista única de reclamações com data, cliente, motivo e solução."
+    actions:
+      - { title: "Criar a lista de reclamações e combinar que toda reclamação entra nela", week: 1, minutes: 20 }
+  - code: m2
+    title: "Resposta padrão"
+    week: 3
+    evidence: "Prazo de resposta definido (24 h) e roteiro de resposta em uso."
+    actions:
+      - { title: "Definir o prazo e o roteiro de resposta a reclamações", week: 2, minutes: 20 }
+      - { title: "Responder todas as reclamações abertas", week: 3, minutes: 30, role: manager }
+  - code: m3
+    title: "Causas atacadas"
+    week: 8
+    evidence: "Três causas mais frequentes com ação corretiva concluída."
+    actions:
+      - { title: "Agrupar as reclamações por causa e escolher as 3 principais", week: 6, minutes: 30 }
+      - { title: "Executar uma correção para cada causa", week: 8, minutes: 60 }
+  - code: m4
+    title: "Reclamações medidas"
+    week: 12
+    evidence: "Número de reclamações do mês registrado."
+    actions:
+      - { title: "Registrar no ritual o número de reclamações do mês", week: 12, minutes: 5 }

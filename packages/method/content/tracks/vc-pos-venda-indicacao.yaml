@@ -1,0 +1,49 @@
+code: vc-pos-venda-indicacao
+version: 1
+title: "Pós-venda e indicação"
+dimension: vendas_clientes
+stages: [organizacao, crescimento, escala]
+tags: [vendas, marca]
+objective: "Transformar clientes satisfeitos em avaliações e indicações."
+why: "Indicação é o canal com maior conversão e menor custo para pequenas empresas."
+impact: 3
+effort: 2
+triggers:
+  - { signal: "dimension:vendas_clientes", op: lt, value: 70, weight: 1 }
+  - { signal: "dimension:marketing_marca", op: lt, value: 55, weight: 1 }
+requires: { bank_statement: false, team_min: 1 }
+indicator:
+  metric: clientes_indicacao_mes
+  target: { type: delta, value: 3 }
+milestones:
+  - code: m1
+    title: "Roteiro de pós-venda"
+    week: 2
+    evidence: "Mensagem de pós-venda definida para 3 e 30 dias após a compra."
+    actions:
+      - { title: "Escrever as mensagens de pós-venda (3 dias e 30 dias)", week: 1, minutes: 30 }
+      - { title: "Definir quem envia e em que momento", week: 2, minutes: 15 }
+  - code: m2
+    title: "Pedido de avaliação"
+    week: 4
+    evidence: "Link de avaliação no Google enviado para os últimos 30 clientes."
+    actions:
+      - { title: "Gerar o link de avaliação do Google Perfil da Empresa", week: 3, minutes: 15 }
+      - { title: "Enviar o pedido de avaliação para os clientes satisfeitos", week: 4, minutes: 30, role: member }
+  - code: m3
+    title: "Programa de indicação"
+    week: 7
+    evidence: "Benefício de indicação definido e divulgado."
+    actions:
+      - { title: "Definir o benefício para quem indica e para quem é indicado", week: 5, minutes: 30 }
+      - { title: "Divulgar o programa nos pós-vendas e no balcão", week: 7, minutes: 20 }
+  - code: m4
+    title: "Indicações medidas"
+    week: 12
+    evidence: "Indicações do mês registradas no ritual."
+    actions:
+      - { title: "Registrar no ritual quantos clientes vieram por indicação", week: 12, minutes: 5 }
+templates:
+  - title: "Pedido de indicação"
+    kind: script
+    body: "Que bom que você gostou, {nome}! Se lembrar de alguém que também precise de {serviço}, indica a gente? Quem você indicar ganha {benefício}, e você também."

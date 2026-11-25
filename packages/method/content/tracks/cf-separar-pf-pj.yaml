@@ -1,0 +1,50 @@
+code: cf-separar-pf-pj
+version: 1
+title: "Separar PF e PJ em 30 dias"
+dimension: caixa_financas
+stages: [sobrevivencia, organizacao]
+tags: [base, caixa]
+objective: "Parar de pagar despesas pessoais com a conta da empresa e definir um pró-labore fixo."
+why: "Enquanto as contas se misturam, ninguém sabe se a empresa dá lucro. É a base de todas as outras decisões."
+impact: 5
+effort: 2
+triggers:
+  - { signal: "metric:despesas_pessoais_pj_pct", op: gt, value: 5, weight: 3 }
+  - { signal: "dimension:caixa_financas", op: lt, value: 50, weight: 1 }
+requires: { bank_statement: true, team_min: 1 }
+indicator:
+  metric: despesas_pessoais_pj_pct
+  target: { type: absolute, value: 5 }
+milestones:
+  - code: m1
+    title: "Retrato do que é pessoal"
+    week: 2
+    evidence: "Lista das despesas pessoais pagas pela PJ nos últimos 3 meses, com o total."
+    actions:
+      - { title: "Revisar no Raio-X todas as saídas marcadas como possível gasto pessoal e confirmar uma a uma", week: 1, minutes: 40 }
+      - { title: "Somar quanto a família custa por mês (moradia, escola, saúde, lazer)", week: 2, minutes: 45 }
+  - code: m2
+    title: "Pró-labore definido"
+    week: 4
+    evidence: "Valor de pró-labore registrado e combinado com o contador."
+    actions:
+      - { title: "Definir o pró-labore com base no custo da família e no que a empresa suporta", week: 3, minutes: 30 }
+      - { title: "Combinar com o contador o valor e a forma de pagamento do pró-labore", week: 4, minutes: 30 }
+  - code: m3
+    title: "Contas separadas"
+    week: 6
+    evidence: "Conta pessoal recebendo o pró-labore e cartões pessoais desvinculados da PJ."
+    actions:
+      - { title: "Abrir ou ativar uma conta pessoal só para receber o pró-labore", week: 5, minutes: 30 }
+      - { title: "Trocar débitos automáticos pessoais da conta PJ para a conta pessoal", week: 6, minutes: 45 }
+  - code: m4
+    title: "Rotina mantida"
+    week: 12
+    evidence: "Dois meses seguidos com despesas pessoais abaixo de 5% das saídas da PJ."
+    actions:
+      - { title: "Conferir no ritual semanal se houve algum gasto pessoal na conta da empresa", week: 8, minutes: 10 }
+      - { title: "Enviar o extrato do mês para atualizar o Raio-X", week: 12, minutes: 10 }
+templates:
+  - title: "Cálculo do pró-labore"
+    kind: planilha
+    body: "Custo mensal da família | Média de sobra da empresa nos últimos 3 meses | Pró-labore = menor valor entre (custo da família) e (60% da sobra média)."

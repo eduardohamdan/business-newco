@@ -1,0 +1,44 @@
+code: df-meta-mensal
+version: 1
+title: "Meta mensal da empresa e por pessoa"
+dimension: direcao_foco
+stages: [organizacao, crescimento, escala]
+tags: [direcao, vendas]
+objective: "Definir a meta de faturamento do mês e desdobrá-la por pessoa ou canal."
+why: "Sem meta, toda semana parece boa ou ruim por impressão. Meta transforma esforço em resultado comparável."
+impact: 4
+effort: 2
+triggers:
+  - { signal: "dimension:direcao_foco", op: lt, value: 60, weight: 2 }
+  - { signal: "dimension:vendas_clientes", op: lt, value: 60, weight: 1 }
+requires: { bank_statement: false, team_min: 1 }
+indicator:
+  metric: equipe_com_meta_pct
+  target: { type: absolute, value: 100 }
+milestones:
+  - code: m1
+    title: "Meta da empresa"
+    week: 2
+    evidence: "Meta de faturamento do próximo mês calculada a partir do ponto de equilíbrio."
+    actions:
+      - { title: "Calcular o ponto de equilíbrio na calculadora do app", week: 1, minutes: 30 }
+      - { title: "Definir a meta do mês: ponto de equilíbrio + lucro desejado", week: 2, minutes: 20 }
+  - code: m2
+    title: "Meta desdobrada"
+    week: 4
+    evidence: "Meta dividida por pessoa, canal ou produto."
+    actions:
+      - { title: "Dividir a meta por pessoa ou canal de venda", week: 3, minutes: 30 }
+      - { title: "Combinar a meta individualmente com cada pessoa", week: 4, minutes: 45 }
+  - code: m3
+    title: "Acompanhamento semanal"
+    week: 8
+    evidence: "Realizado contra meta revisado toda semana na reunião ou no ritual."
+    actions:
+      - { title: "Registrar no ritual o faturamento acumulado do mês", week: 5, minutes: 5 }
+  - code: m4
+    title: "Fechamento do mês"
+    week: 12
+    evidence: "Dois meses fechados com a meta comparada ao realizado."
+    actions:
+      - { title: "Fechar o mês e definir a meta seguinte com base no resultado", week: 12, minutes: 30 }

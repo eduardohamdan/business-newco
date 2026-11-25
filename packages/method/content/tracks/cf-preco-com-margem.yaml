@@ -1,0 +1,55 @@
+code: cf-preco-com-margem
+version: 1
+title: "Preço com margem"
+dimension: caixa_financas
+stages: [sobrevivencia, organizacao, crescimento]
+tags: [caixa, margem]
+objective: "Calcular a margem real dos principais produtos ou serviços e ajustar os preços que estão no prejuízo."
+why: "Vender muito com margem errada acelera o prejuízo. Preço é a alavanca de lucro mais rápida que existe."
+impact: 5
+effort: 3
+triggers:
+  - { signal: "metric:margem_bruta_pct", op: lt, value: 35, weight: 3 }
+  - { signal: "dimension:caixa_financas", op: lt, value: 60, weight: 1 }
+  - { signal: "metric:meses_caixa_negativo", op: gte, value: 1, weight: 1 }
+requires: { bank_statement: false, team_min: 1 }
+indicator:
+  metric: margem_bruta_pct
+  target: { type: delta, value: 5, max: 80 }
+milestones:
+  - code: m1
+    title: "Top 5 itens mapeados"
+    week: 2
+    evidence: "Lista dos 5 itens que mais faturam, com preço atual e custo direto."
+    actions:
+      - { title: "Listar os 5 produtos ou serviços que mais trazem faturamento", week: 1, minutes: 30 }
+      - { title: "Levantar o custo direto de cada um (material, insumo, comissão, frete)", week: 2, minutes: 60 }
+  - code: m2
+    title: "Margem real calculada"
+    week: 4
+    evidence: "Margem de cada item calculada na calculadora de preço do app."
+    actions:
+      - { title: "Usar a calculadora de preço com impostos e taxas de cartão para cada item", week: 3, minutes: 45 }
+      - { title: "Marcar os itens com margem abaixo da meta", week: 4, minutes: 20 }
+  - code: m3
+    title: "Novos preços em vigor"
+    week: 7
+    evidence: "Tabela de preços nova publicada e comunicada aos clientes."
+    actions:
+      - { title: "Definir novos preços para os itens abaixo da meta (ou cortar custo)", week: 5, minutes: 45 }
+      - { title: "Comunicar o reajuste aos clientes com o roteiro pronto", week: 6, minutes: 30 }
+      - { title: "Atualizar catálogo, cardápio ou tabela", week: 7, minutes: 30 }
+  - code: m4
+    title: "Margem acompanhada"
+    week: 12
+    evidence: "Margem bruta do mês registrada por dois meses seguidos."
+    actions:
+      - { title: "Registrar a margem bruta do mês no painel", week: 9, minutes: 15 }
+      - { title: "Revisar se algum cliente ou item precisa de ajuste fino", week: 12, minutes: 30 }
+templates:
+  - title: "Fórmula do preço"
+    kind: modelo
+    body: "Preço = Custo direto / (1 - (% impostos + % taxas + % comissão + % margem desejada))."
+  - title: "Mensagem de reajuste"
+    kind: script
+    body: "Olá, {nome}! Para manter a qualidade que você conhece, nossos preços terão um ajuste a partir de {data}. Quem fechar até lá mantém o valor atual. Qualquer dúvida, estou aqui."

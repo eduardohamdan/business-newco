@@ -1,0 +1,44 @@
+code: pl-tirar-dono-do-operacional
+version: 1
+title: "Tirar o dono do operacional"
+dimension: pessoas_lideranca
+stages: [organizacao, crescimento, escala]
+tags: [pessoas]
+objective: "Delegar três rotinas operacionais do dono com padrão e acompanhamento."
+why: "O tempo do dono é o recurso mais escasso da empresa. Cada hora delegada vai para vender, liderar e decidir."
+impact: 4
+effort: 3
+triggers:
+  - { signal: "dimension:pessoas_lideranca", op: lt, value: 55, weight: 2 }
+  - { signal: "dimension:operacao_entrega", op: gte, value: 40, weight: 1 }
+requires: { bank_statement: false, team_min: 2 }
+indicator:
+  metric: horas_operacionais_dono_semana
+  target: { type: pct_change, value: -0.25 }
+milestones:
+  - code: m1
+    title: "Agenda do dono medida"
+    week: 2
+    evidence: "Uma semana de agenda registrada, separando operacional e gestão."
+    actions:
+      - { title: "Anotar por uma semana onde vai cada hora do seu dia", week: 1, minutes: 15 }
+      - { title: "Escolher 3 rotinas operacionais para delegar", week: 2, minutes: 20 }
+  - code: m2
+    title: "Rotinas documentadas"
+    week: 4
+    evidence: "Passo a passo das 3 rotinas escrito ou gravado."
+    actions:
+      - { title: "Gravar ou escrever o passo a passo das 3 rotinas", week: 3, minutes: 60 }
+      - { title: "Escolher quem assume cada rotina", week: 4, minutes: 15 }
+  - code: m3
+    title: "Delegação com acompanhamento"
+    week: 8
+    evidence: "As 3 rotinas executadas pela equipe por 4 semanas."
+    actions:
+      - { title: "Acompanhar as rotinas delegadas sem refazer", week: 5, minutes: 20 }
+  - code: m4
+    title: "Horas recuperadas"
+    week: 12
+    evidence: "Horas operacionais do dono registradas no ritual."
+    actions:
+      - { title: "Registrar no ritual as horas operacionais da semana", week: 12, minutes: 5 }
