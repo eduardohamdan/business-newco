@@ -17,7 +17,8 @@
     "@beos/core": "workspace:*",
     "@beos/db": "workspace:*",
     "@beos/method": "workspace:*",
-    "zod": "^4.1.0"
+    "zod": "^4.1.0",
+    "pg-boss": "^12.39.0"
   },
   "devDependencies": {
     "pg": "^8.16.0",

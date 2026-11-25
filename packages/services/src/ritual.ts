@@ -166,3 +166,52 @@ export async function evaluateOrgAlerts(orgId: string, today = new Date().toISOS
     });
   });
 }
+
+/**
+ * Acompanhamento do ritual enviado: lembrete após 24h; após 72h sem resposta vira "missed" (conta para o alerta).
+ */
+export async function followUpRitual(orgId: string, now = new Date()) {
+  const s = await withTenant(orgId, (db) => repo.openRitualSession(db));
+  if (!s?.sent_at) return { action: "none" as const };
+  const hours = (now.getTime() - new Date(s.sent_at).getTime()) / 3_600_000;
+  if (hours >= 72) {
+    await withTenant(orgId, (db) => repo.updateRitualSession(db, s.id, { status: "missed" }));
+    return { action: "missed" as const };
+  }
+  if (hours < 24) return { action: "none" as const };
+  const already = await withTenant(orgId, (db) => db.query(`select 1 from messages where ritual_session_id = $1 and template = 'ritual_lembrete'`, [s.id]));
+  if (already.rowCount) return { action: "none" as const };
+  const owner = await withSystem(async (db) => (await identity.listMembers(db, orgId)).find((m) => m.role === "owner"));
+  if (!owner) return { action: "none" as const };
+  const link = `${process.env.APP_URL ?? "http://localhost:3000"}/app/ritual`;
+  const name = owner.name?.split(" ")[0] ?? "Olá";
+  if (s.channel === "whatsapp" && owner.phone_e164) {
+    const r = await whatsappFromEnv().sendTemplate(owner.phone_e164, "ritual_lembrete", [name, link]);
+    await withTenant(orgId, (db) => repo.insertMessage(db, { channel: "whatsapp", direction: "outbound", userId: owner.id, template: "ritual_lembrete", providerMessageId: r.messageId, status: "sent", ritualSessionId: s.id }));
+  } else {
+    await emailFromEnv().send({ to: owner.email, subject: "Seu ritual da semana está em aberto", text: `${name}, leva 5 minutos: ${link}` });
+    await withTenant(orgId, (db) => repo.insertMessage(db, { channel: "email", direction: "outbound", userId: owner.id, template: "ritual_lembrete", status: "sent", ritualSessionId: s.id }));
+  }
+  return { action: "reminded" as const };
+}
+
+/** Envia o alerta mais grave, no máximo um por semana por organização. */
+export async function notifyAlerts(orgId: string, today = new Date().toISOString().slice(0, 10)) {
+  const alerts = await evaluateOrgAlerts(orgId, today);
+  const top = alerts[0];
+  if (!top) return null;
+  const recent = await withTenant(orgId, (db) => db.query(`select 1 from messages where template = 'alerta_desvio' and created_at > now() - interval '7 days'`));
+  if (recent.rowCount) return null;
+  const owner = await withSystem(async (db) => (await identity.listMembers(db, orgId)).find((m) => m.role === "owner"));
+  if (!owner) return null;
+  const link = `${process.env.APP_URL ?? "http://localhost:3000"}/app`;
+  const hasOptIn = await withTenant(orgId, (db) => repo.hasConsent(db, "whatsapp_opt_in"));
+  if (owner.phone_e164 && hasOptIn) {
+    const r = await whatsappFromEnv().sendTemplate(owner.phone_e164, "alerta_desvio", [owner.name?.split(" ")[0] ?? "Olá", top.text, link]);
+    await withTenant(orgId, (db) => repo.insertMessage(db, { channel: "whatsapp", direction: "outbound", userId: owner.id, template: "alerta_desvio", body: top.text, providerMessageId: r.messageId, status: "sent" }));
+  } else {
+    await emailFromEnv().send({ to: owner.email, subject: "Atenção no seu plano", text: `${top.text}\n\n${link}` });
+    await withTenant(orgId, (db) => repo.insertMessage(db, { channel: "email", direction: "outbound", userId: owner.id, template: "alerta_desvio", body: top.text, status: "sent" }));
+  }
+  return top;
+}
