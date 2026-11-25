@@ -24,7 +24,7 @@ stages:
         - { signal: "metric:folego_caixa_dias", op: lt, value: 15 }
         - { signal: "metric:meses_caixa_negativo", op: gte, value: 2 }
         - { signal: "metric:despesas_pessoais_pj_pct", op: gt, value: 10 }
-        - { signal: "dimension:caixa_financas", op: lt, value: 35 }
+        - { signal: "dimension:caixa_financas", op: lt, value: 30 }
   - code: organizacao
     order: 2
     name: Organização

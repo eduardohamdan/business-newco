@@ -30,7 +30,7 @@
             {
               "signal": "dimension:caixa_financas",
               "op": "lt",
-              "value": 35
+              "value": 30
             }
           ]
         },
