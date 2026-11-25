@@ -1,5 +1,5 @@
 import { interpretRitualReply } from "@beos/ai";
-import { isNoBlocker, parseActionReply, parseMetricReply } from "@beos/core";
+import { isNoBlocker, normalizeText, parseActionReply, parseMetricReply } from "@beos/core";
 import { evaluateAlerts, getActionTitle, applyRitual, buildRitualQuestions, computeTarget, cycleWeek, type RitualPriority, type RitualQuestion } from "./ritual-core";
 import { emailFromEnv, renderTemplate, whatsappFromEnv, type InboundEvent } from "@beos/channels";
 import { identity, repo, withSystem, withTenant, type ActiveCycle } from "@beos/db";
@@ -99,6 +99,18 @@ export async function handleWhatsAppEvent(ev: InboundEvent): Promise<void> {
   if (!user) return;
   const orgs = await withSystem((db) => identity.listUserOrganizations(db, user.id));
   const wa = whatsappFromEnv();
+  // Descadastro (LGPD / política da Meta): "SAIR" ou "PARAR" revoga o opt-in em todas as empresas do usuário.
+  if (ev.kind === "text" && /^(SAIR|PARAR|STOP|DESCADASTRAR)$/.test(normalizeText(ev.text))) {
+    for (const org of orgs) {
+      await withTenant(org.id, async (db) => {
+        await repo.revokeConsent(db, "whatsapp_opt_in");
+        await repo.updateOrganization(db, { ritual_channel: "email" });
+        await repo.audit(db, user.id, "whatsapp.opt_out");
+      });
+    }
+    await wa.sendText(ev.from, "Pronto, você não vai mais receber mensagens por aqui. O ritual seguirá por e-mail. Para voltar, ative nas Configurações do app.");
+    return;
+  }
   for (const org of orgs) {
     const open = await withTenant(org.id, (db) => repo.openRitualSession(db));
     if (!open) continue;
@@ -153,11 +165,12 @@ export async function evaluateOrgAlerts(orgId: string, today = new Date().toISOS
     const cycle = await repo.getActiveCycle(db);
     if (!cycle) return [];
     const metrics = await repo.latestMetrics(db);
+    const week = cycleWeek(cycle.cycle.starts_on, today);
     const deviations = cycle.priorities
       .filter((p) => p.target !== null && metrics[p.metric_code])
       .map((p) => {
         const m = getMetric(p.metric_code);
-        return { metric: p.metric_code, value: metrics[p.metric_code]!.value, target: p.target!, direction: m.direction, tolerance: m.tolerance };
+        return { metric: p.metric_code, value: metrics[p.metric_code]!.value, baseline: p.baseline, target: p.target!, week, direction: m.direction, tolerance: m.tolerance };
       });
     return evaluateAlerts({
       missedRitualsInRow: await repo.missedRitualsInRow(db, cycle.cycle.id),

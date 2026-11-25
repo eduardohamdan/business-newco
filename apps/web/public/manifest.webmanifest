@@ -1,0 +1,10 @@
+{
+  "name": "Business Evolution OS",
+  "short_name": "Evolution",
+  "start_url": "/app",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#12263a",
+  "lang": "pt-BR",
+  "icons": []
+}

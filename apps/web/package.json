@@ -1,0 +1,30 @@
+{
+  "name": "@beos/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@beos/billing": "workspace:*",
+    "@beos/channels": "workspace:*",
+    "@beos/core": "workspace:*",
+    "@beos/db": "workspace:*",
+    "@beos/method": "workspace:*",
+    "@beos/services": "workspace:*",
+    "next": "^16.4.6",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "server-only": "^0.0.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.5",
+    "@types/react": "^19.3.3",
+    "@types/react-dom": "^19.2.0",
+    "tailwindcss": "^4.3.5"
+  }
+}

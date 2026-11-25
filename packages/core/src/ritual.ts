@@ -166,9 +166,12 @@ export function applyRitual(
   return { actionUpdates, metricValues, blocker, risks, overallRisk, nextAction, summary };
 }
 
-/** Risco = ações concluídas / ações previstas até a semana. */
+/**
+ * Risco = ações concluídas / ações que já deveriam estar prontas (semanas ANTERIORES à atual).
+ * A ação da semana corrente ainda está no prazo; antes do início do ciclo (semana 0) nada está atrasado.
+ */
 export function priorityRisk(p: RitualPriority, week: number): RiskLevel {
-  const expected = p.actions.filter((a) => a.week <= week && a.status !== "skipped");
+  const expected = p.actions.filter((a) => a.week < week && a.status !== "skipped");
   if (!expected.length) return "on_track";
   const done = expected.filter((a) => a.status === "done").length + 0.5 * expected.filter((a) => a.status === "doing").length;
   const ratio = done / expected.length;
@@ -180,7 +183,8 @@ const riskRank = (r: RiskLevel) => (r === "off_track" ? 2 : r === "at_risk" ? 1 
 export interface AlertInput {
   missedRitualsInRow: number;
   lateMilestones: { title: string; dueDate: string }[];
-  metricDeviations: { metric: string; value: number; target: number; direction: "up" | "down"; tolerance: number }[];
+  /** week = semana atual do ciclo; baseline = valor no início. O desvio é medido contra a trajetória esperada. */
+  metricDeviations: { metric: string; value: number; baseline: number | null; target: number; week: number; direction: "up" | "down"; tolerance: number }[];
 }
 
 export interface Alert {
@@ -196,8 +200,17 @@ export function evaluateAlerts(i: AlertInput): Alert[] {
     out.push({ code: "ritual_ausente", severity: 3, text: `Já são ${i.missedRitualsInRow} semanas sem ritual. Que tal 5 minutos agora para retomar?` });
   for (const ms of i.lateMilestones) out.push({ code: "marco_atrasado", severity: 2, text: `O marco "${ms.title}" venceu em ${ms.dueDate}.` });
   for (const d of i.metricDeviations) {
-    const off = d.direction === "up" ? d.value < d.target - d.tolerance : d.value > d.target + d.tolerance;
-    if (off) out.push({ code: "indicador_fora", severity: 2, text: `${getMetric(d.metric).name} está em ${d.value}, fora da tolerância da meta (${d.target}).` });
+    // Nas 3 primeiras semanas não há trajetória suficiente para cobrar desvio.
+    if (d.week < 4 || d.baseline === null) continue;
+    const expected = d.baseline + (d.target - d.baseline) * Math.min(1, d.week / 12);
+    const off = d.direction === "up" ? d.value < expected - d.tolerance : d.value > expected + d.tolerance;
+    const unit = getMetric(d.metric).unit === "pct" ? "%" : "";
+    if (off)
+      out.push({
+        code: "indicador_fora",
+        severity: 2,
+        text: `${getMetric(d.metric).name} está em ${d.value.toLocaleString("pt-BR")}${unit}; nesta semana o esperado era chegar perto de ${Math.round(expected * 10) / 10}${unit} rumo à meta de ${d.target}${unit}.`,
+      });
   }
   return out.sort((a, b) => b.severity - a.severity);
 }

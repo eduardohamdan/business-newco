@@ -12,6 +12,14 @@ export type Db = pg.PoolClient;
 pg.types.setTypeParser(20, (v) => Number(v));
 pg.types.setTypeParser(1700, (v) => Number(v));
 pg.types.setTypeParser(1082, (v) => v);
+// timestamptz/timestamp viram string ISO 8601 (os tipos das linhas declaram string).
+const toIso = (v: string) => {
+  const s = v.replace(" ", "T").replace(/([+-]\d{2})$/, "$1:00");
+  const d = new Date(/[zZ]|[+-]\d{2}:\d{2}$/.test(s) ? s : `${s}Z`);
+  return Number.isNaN(d.getTime()) ? v : d.toISOString();
+};
+pg.types.setTypeParser(1184, toIso);
+pg.types.setTypeParser(1114, toIso);
 
 let pool: pg.Pool | undefined;
 

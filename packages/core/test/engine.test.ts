@@ -18,6 +18,7 @@ import {
   parseActionReply,
   parseCsv,
   planForBand,
+  priorityRisk,
   priceFromCost,
   prioritize,
   reconcile,
@@ -135,6 +136,10 @@ describe("ritual", () => {
     expect(parseActionReply("não deu essa semana")).toBe("not_done");
     expect(parseActionReply("banana")).toBeNull();
   });
+  it("nada está atrasado na semana corrente; atrasa quando a semana passa", () => {
+    expect(priorityRisk(priorities[0]!, 1)).toBe("on_track");
+    expect(priorityRisk(priorities[0]!, 3)).toBe("off_track");
+  });
   it("aplica respostas, recalcula risco e sugere próxima ação", () => {
     const qs = buildRitualQuestions(priorities, 1);
     const out = applyRitual(priorities, 1, { action: "feito", metric: "12 contatos", blocker: "não" }, qs);
@@ -154,8 +159,12 @@ describe("ritual", () => {
     const al = evaluateAlerts({
       missedRitualsInRow: 2,
       lateMilestones: [{ title: "Pró-labore definido", dueDate: "2026-11-01" }],
-      metricDeviations: [{ metric: "folego_caixa_dias", value: 10, target: 30, direction: "up", tolerance: 5 }],
+      metricDeviations: [
+        { metric: "folego_caixa_dias", value: 10, baseline: 10, target: 30, week: 8, direction: "up", tolerance: 5 },
+        { metric: "despesas_pessoais_pj_pct", value: 15, baseline: 15, target: 5, week: 2, direction: "down", tolerance: 2 },
+      ],
     });
+    // O segundo desvio é ignorado: semana 2 é cedo demais para cobrar trajetória.
     expect(al.map((a) => a.code)).toEqual(["ritual_ausente", "marco_atrasado", "indicador_fora"]);
   });
 });
