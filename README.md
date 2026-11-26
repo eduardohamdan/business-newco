@@ -11,6 +11,7 @@ Painel de Desempenho, achados) → **até 3 prioridades** viram **trilhas** com 
 - Especificação: [`docs/prd/PRD-v1.1.pdf`](docs/prd/PRD-v1.1.pdf)
 - Regras para quem for programar (pessoas ou agentes): [`AGENTS.md`](AGENTS.md)
 - Arquitetura: [`docs/arquitetura.md`](docs/arquitetura.md)
+- Interface e identidade visual (protótipo navegável): [`docs/design/interface-ideal.html`](docs/design/interface-ideal.html)
 - O que está pronto e o que falta: [`docs/plano-de-construcao.md`](docs/plano-de-construcao.md)
 
 ## Rodando localmente

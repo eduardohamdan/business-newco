@@ -52,6 +52,8 @@ implementados e cobertos parcialmente (falta teste de UI).
 | P2.6 | PDF gerado no servidor | Chromium headless no worker a partir das rotas `/app/relatorios/*`, enviado por e-mail no fechamento. |
 | P2.7 | Fallback de PDF por IA | Para layouts não reconhecidos: extração estruturada via `extract_statement`, sempre conferida pela conciliação. |
 | P2.8 | Upgrade de faixa | Quando o faturamento do Raio-X indicar outra faixa, sugerir troca de plano. |
+| P2.9 | Layout do protótipo de interface | Tokens, fonte, logo e marca-texto na próxima ação já aplicados. Falta levar o layout de `docs/design/interface-ideal.html` para as telas: faixa das 12 semanas no Cockpit, prioridades como linhas com régua início/agora/meta, achados do Raio-X em três colunas, escada de estágios no Diagnóstico. |
+| P2.10 | Nome da marca | "Compasso" é nome de trabalho. Antes de trocar (`apps/web/lib/brand.ts` e `public/manifest.webmanifest`): busca no INPI (classes 9, 35, 42), domínio .com.br e @ nas redes. |
 
 ## 4. Fase 2 do PRD (não começar antes do gate da Fase 1)
 

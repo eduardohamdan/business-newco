@@ -16,7 +16,7 @@ export default function Relatorios() {
       <div className="grid gap-4 sm:grid-cols-2">
         {R.map((r) => (
           <a key={r.tipo} href={`/app/relatorios/${r.tipo}`}>
-            <Card title={r.t} className="h-full hover:border-brand"><p className="text-sm text-slate-600">{r.d}</p></Card>
+            <Card title={r.t} className="h-full hover:border-tinta"><p className="text-sm text-grafite-2">{r.d}</p></Card>
           </a>
         ))}
       </div>

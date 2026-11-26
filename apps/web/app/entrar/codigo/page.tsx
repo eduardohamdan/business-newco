@@ -7,8 +7,8 @@ export default async function Codigo({ searchParams }: { searchParams: Promise<{
   const { email = "", erro } = await searchParams;
   return (
     <main className="mx-auto max-w-md px-6 py-16">
-      <h1 className="text-2xl font-bold text-navy">Digite o código</h1>
-      <p className="mt-1 text-sm text-slate-600">Enviamos para <strong>{email}</strong>. Ele vale por 10 minutos.</p>
+      <h1 className="text-2xl font-bold text-grafite">Digite o código</h1>
+      <p className="mt-1 text-sm text-grafite-2">Enviamos para <strong>{email}</strong>. Ele vale por 10 minutos.</p>
       <div className="mt-6">
         <Flash erro={erro} />
         <form action={checkCode} className="space-y-4">
@@ -18,7 +18,7 @@ export default async function Codigo({ searchParams }: { searchParams: Promise<{
           </Field>
           <Button className="w-full">Entrar</Button>
         </form>
-        <a href="/entrar" className="mt-4 block text-center text-sm text-brand">Usar outro e-mail</a>
+        <a href="/entrar" className="mt-4 block text-center text-sm text-tinta">Usar outro e-mail</a>
       </div>
     </main>
   );

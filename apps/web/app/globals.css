@@ -1,16 +1,52 @@
 @import "tailwindcss";
 
+/*
+ * Identidade visual — referência completa em docs/design/interface-ideal.html (aba Identidade).
+ * Linguagem do caderninho de contas: azul-caneta para o que é da empresa, marca-texto só para a
+ * próxima ação (uma vez por tela), vermelho só para o que venceu ou é crítico, pauta no lugar de cartões.
+ */
 @theme {
-  --color-navy: #12263a;
-  --color-brand: #0e7c66;
-  --color-brand-50: #e8f4f0;
-  --color-amber-soft: #fdf6e7;
-  --color-red-soft: #fbedec;
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --color-papel: #f4f6fa;        /* fundo */
+  --color-folha: #ffffff;        /* superfícies */
+  --color-pauta: #d8dfee;        /* linhas, divisores, trilhos */
+  --color-pauta-forte: #b9c4dd;  /* bordas de campos e botões secundários */
+  --color-tinta: #2440c8;        /* azul-caneta: marca, ações, dados do cliente */
+  --color-tinta-escura: #172c93; /* hover do primário */
+  --color-tinta-clara: #e8ecfb;  /* fundos de destaque informativo */
+  --color-grafite: #1a2033;      /* texto principal e estrutura */
+  --color-grafite-2: #4a536b;    /* texto secundário */
+  --color-grafite-3: #667089;    /* texto de apoio */
+  --color-marca-texto: #f6e35a;  /* a próxima ação — e só ela */
+  --color-ritmo: #17704a;        /* no ritmo / positivo */
+  --color-ritmo-claro: #e3f3ea;
+  --color-atencao: #8f5d05;      /* abaixo do esperado */
+  --color-atencao-claro: #fbf0d9;
+  --color-atraso: #b03333;       /* venceu / crítico */
+  --color-atraso-claro: #fbe7e7;
+
+  --font-sans: "Schibsted Grotesk Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+  --radius-s: 6px;
+  --radius-m: 12px;
+  --radius-l: 20px;
 }
 
 html { -webkit-text-size-adjust: 100%; }
-body { @apply bg-slate-50 text-slate-800 antialiased; }
+body { @apply bg-papel text-grafite antialiased; }
+:focus-visible { outline: 3px solid var(--color-tinta); outline-offset: 2px; }
+
+/* Marca-texto: use em <mark className="marca-texto"> apenas na próxima ação da tela. */
+.marca-texto {
+  background: linear-gradient(transparent 52%, var(--color-marca-texto) 52%, var(--color-marca-texto) 92%, transparent 92%);
+  color: inherit;
+  padding: 0 0.1em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
 
 @media print {
   .no-print { display: none !important; }

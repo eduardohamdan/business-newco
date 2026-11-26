@@ -27,7 +27,7 @@ export default async function Ritual({ searchParams }: { searchParams: Promise<{
       <PageTitle title={`Ritual da semana ${week}`} subtitle="5 minutos: o que foi feito, o número da semana e o que está travando." />
       <Flash ok={ok} erro={erro} />
       {!current && (
-        <Card><p className="text-sm text-slate-600">O ritual desta semana ainda não foi enviado. Você pode fazer agora pelo app.</p><form action={startWebRitual} className="mt-3"><Button>Fazer o ritual agora</Button></form></Card>
+        <Card><p className="text-sm text-grafite-2">O ritual desta semana ainda não foi enviado. Você pode fazer agora pelo app.</p><form action={startWebRitual} className="mt-3"><Button>Fazer o ritual agora</Button></form></Card>
       )}
       {open && (
         <Card>
@@ -37,10 +37,10 @@ export default async function Ritual({ searchParams }: { searchParams: Promise<{
               <div key={q.id}>
                 {q.kind === "action_status" && (
                   <fieldset>
-                    <legend className="text-sm font-medium text-navy">{q.text}</legend>
+                    <legend className="text-sm font-medium text-grafite">{q.text}</legend>
                     <div className="mt-2 flex flex-wrap gap-2">
                       {q.options.map((o: any) => (
-                        <label key={o.id} className="flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 text-sm"><input type="radio" name="action" value={o.id} required /> {o.label}</label>
+                        <label key={o.id} className="flex items-center gap-2 rounded-xl border border-pauta px-3 py-2 text-sm"><input type="radio" name="action" value={o.id} required /> {o.label}</label>
                       ))}
                     </div>
                   </fieldset>
@@ -57,7 +57,7 @@ export default async function Ritual({ searchParams }: { searchParams: Promise<{
         <Card title="Resumo da semana"><p className="text-sm">{current.outcome.summary}</p></Card>
       )}
       <Card title="Histórico" className="mt-4">
-        <ul className="divide-y divide-slate-100 text-sm">
+        <ul className="divide-y divide-pauta text-sm">
           {history.map((h: any) => (
             <li key={h.week} className="flex items-center justify-between py-2">
               <span>Semana {h.week}{h.answered_at && ` · ${formatDate(h.answered_at)}`}</span>

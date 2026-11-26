@@ -32,10 +32,10 @@ export default async function Configuracoes({ searchParams }: { searchParams: Pr
           </form>
         </Card>
         <Card title="Equipe">
-          <ul className="mb-3 divide-y divide-slate-100 text-sm">{members.map((m) => <li key={m.id} className="flex justify-between py-2"><span>{m.name ?? m.email} <span className="text-slate-400">{m.email}</span></span><Badge>{m.role === "owner" ? "Dono" : m.role === "manager" ? "Gestor" : "Colaborador"}</Badge></li>)}</ul>
+          <ul className="mb-3 divide-y divide-pauta text-sm">{members.map((m) => <li key={m.id} className="flex justify-between py-2"><span>{m.name ?? m.email} <span className="text-grafite-3">{m.email}</span></span><Badge>{m.role === "owner" ? "Dono" : m.role === "manager" ? "Gestor" : "Colaborador"}</Badge></li>)}</ul>
           <form action={inviteMember} className="flex flex-col gap-2 sm:flex-row">
             <input name="email" type="email" required placeholder="email@empresa.com.br" className={inputCls} />
-            <select name="role" className="rounded-xl border border-slate-300 px-2 text-sm"><option value="member">Colaborador</option><option value="manager">Gestor</option></select>
+            <select name="role" className="rounded-xl border border-pauta-forte px-2 text-sm"><option value="member">Colaborador</option><option value="manager">Gestor</option></select>
             <Button variant="secondary">Adicionar</Button>
           </form>
         </Card>
@@ -55,8 +55,8 @@ export default async function Configuracoes({ searchParams }: { searchParams: Pr
           ) : <p className="text-sm">Faixa de faturamento fora do atendimento da plataforma.</p>}
         </Card>
         <Card title="Seus dados (LGPD)">
-          <p className="text-sm text-slate-600">Baixe uma cópia completa dos dados da empresa ou exclua a conta. A exclusão é definitiva.</p>
-          <a href="/api/export" className="mt-3 inline-block text-sm font-semibold text-brand">Baixar meus dados (JSON)</a>
+          <p className="text-sm text-grafite-2">Baixe uma cópia completa dos dados da empresa ou exclua a conta. A exclusão é definitiva.</p>
+          <a href="/api/export" className="mt-3 inline-block text-sm font-semibold text-tinta">Baixar meus dados (JSON)</a>
           {s.role === "owner" && (
             <form action={deleteCompanyAction} className="mt-4 flex flex-col gap-2 sm:flex-row">
               <input name="confirmCnpj" required placeholder="Digite o CNPJ para confirmar" className={inputCls} />

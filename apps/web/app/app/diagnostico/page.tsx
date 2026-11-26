@@ -55,7 +55,7 @@ export default async function Diagnostico({ searchParams }: { searchParams: Prom
       <PageTitle
         title="Diagnóstico"
         subtitle={<>Estágio <strong>{STAGE_LABEL[d.stage.stage]}</strong> · Índice de maturidade <strong>{d.maturity.avg ?? "—"}</strong>/100 · <Badge tone={d.confidenceLabel === "alta" ? "green" : d.confidenceLabel === "moderada" ? "amber" : "red"}>{CONFIDENCE_TEXT[d.confidenceLabel]}</Badge></>}
-        actions={<div className="flex gap-2"><a href="/app/diagnostico?refazer=1" className="text-sm text-brand">Refazer questionário</a><form action={rerunDiagnosis}><Button variant="secondary">Atualizar</Button></form></div>}
+        actions={<div className="flex gap-2"><a href="/app/diagnostico?refazer=1" className="text-sm text-tinta">Refazer questionário</a><form action={rerunDiagnosis}><Button variant="secondary">Atualizar</Button></form></div>}
       />
       <Flash ok={ok} erro={erro} />
       {r.narrative && <div className="mb-4"><Notice>{r.narrative}</Notice></div>}
@@ -68,7 +68,7 @@ export default async function Diagnostico({ searchParams }: { searchParams: Prom
         </div>
       )}
       <div className="grid gap-4 md:grid-cols-2">
-        <Card title="Índice de Maturidade" actions={<span className="text-xs text-slate-500">como a empresa é gerida</span>}>
+        <Card title="Índice de Maturidade" actions={<span className="text-xs text-grafite-3">como a empresa é gerida</span>}>
           <ul className="space-y-3">
             {m.manifest.dimensions.map((dim) => {
               const sc = d.maturity.dimensions[dim.code]?.score;
@@ -81,8 +81,8 @@ export default async function Diagnostico({ searchParams }: { searchParams: Prom
             })}
           </ul>
         </Card>
-        <Card title="Painel de Desempenho" actions={<span className="text-xs text-slate-500">como a empresa está indo</span>}>
-          <ul className="divide-y divide-slate-100 text-sm">
+        <Card title="Painel de Desempenho" actions={<span className="text-xs text-grafite-3">como a empresa está indo</span>}>
+          <ul className="divide-y divide-pauta text-sm">
             {d.panel.map((p: any) => (
               <li key={p.metric} className="flex justify-between py-1.5"><span>{p.name}</span><span className="font-semibold">{formatMetric(p.metric, p.value)}</span></li>
             ))}
@@ -92,9 +92,9 @@ export default async function Diagnostico({ searchParams }: { searchParams: Prom
       <Card title="O que encontramos" className="mt-4">
         <ol className="space-y-3">
           {d.findings.map((f: any) => (
-            <li key={f.code} className="rounded-xl bg-slate-50 p-3">
-              <p className="font-medium text-navy">{f.rank}. {f.title}</p>
-              <p className="text-sm text-slate-600">{f.body}</p>
+            <li key={f.code} className="rounded-xl bg-papel p-3">
+              <p className="font-medium text-grafite">{f.rank}. {f.title}</p>
+              <p className="text-sm text-grafite-2">{f.body}</p>
               <Why items={f.evidence} confidence={`Impacto ${f.impact}/5 · Urgência ${f.urgency}/5`} />
             </li>
           ))}
@@ -107,21 +107,21 @@ export default async function Diagnostico({ searchParams }: { searchParams: Prom
           <form action={approvePlanAction} className="space-y-3">
             <input type="hidden" name="diagnosisId" value={dx.id} />
             {pr.selected.map((p: any) => (
-              <label key={p.code} className="flex gap-3 rounded-xl border border-brand bg-brand-50 p-3">
+              <label key={p.code} className="flex gap-3 rounded-xl border border-tinta bg-tinta-clara p-3">
                 <input type="checkbox" name="track" value={p.code} defaultChecked />
                 <div>
-                  <p className="font-semibold text-navy">{p.title}</p>
-                  {p.tip && <p className="text-sm text-slate-600">{p.tip}</p>}
+                  <p className="font-semibold text-grafite">{p.title}</p>
+                  {p.tip && <p className="text-sm text-grafite-2">{p.tip}</p>}
                   <Why items={p.reasons.map((x: string) => `Sinal que pesou: ${x}`)} />
                 </div>
               </label>
             ))}
             {pr.deferred.length > 0 && (
               <details className="text-sm">
-                <summary className="cursor-pointer font-medium text-slate-700">Outras trilhas relevantes ({pr.deferred.length}) — por que ficaram para depois</summary>
+                <summary className="cursor-pointer font-medium text-grafite-2">Outras trilhas relevantes ({pr.deferred.length}) — por que ficaram para depois</summary>
                 <ul className="mt-2 space-y-2">
                   {pr.deferred.map((p: any) => (
-                    <li key={p.code} className="flex gap-3 rounded-lg border border-slate-200 p-2">
+                    <li key={p.code} className="flex gap-3 rounded-lg border border-pauta p-2">
                       <input type="checkbox" name="track" value={p.code} />
                       <span><strong>{p.title}</strong> — {p.reason}</span>
                     </li>
@@ -129,7 +129,7 @@ export default async function Diagnostico({ searchParams }: { searchParams: Prom
                 </ul>
               </details>
             )}
-            <p className="text-xs text-slate-500">No máximo 3. Focar em poucas coisas é o que faz o ciclo dar resultado.</p>
+            <p className="text-xs text-grafite-3">No máximo 3. Focar em poucas coisas é o que faz o ciclo dar resultado.</p>
             <Button>Confirmar prioridades e criar o plano</Button>
           </form>
         </Card>

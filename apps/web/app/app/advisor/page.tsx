@@ -20,7 +20,7 @@ export default async function Advisor({ searchParams }: { searchParams: Promise<
         <form action={askAdvisorAction} className="space-y-3">
           <textarea name="question" required rows={3} maxLength={1000} className={inputCls} placeholder={EXEMPLOS[0]} />
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <p className="text-xs text-slate-500">Não oriento sobre questões jurídicas, tributárias individuais, crédito ou investimentos.</p>
+            <p className="text-xs text-grafite-3">Não oriento sobre questões jurídicas, tributárias individuais, crédito ou investimentos.</p>
             <Button>Perguntar</Button>
           </div>
         </form>
@@ -28,15 +28,15 @@ export default async function Advisor({ searchParams }: { searchParams: Promise<
       <div className="space-y-3">
         {items.map((r) => (
           <Card key={r.id}>
-            <p className="text-sm font-medium text-navy">{r.question}</p>
-            <p className="mt-2 whitespace-pre-wrap text-sm text-slate-700">{r.content}</p>
-            <div className="mt-2 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500">
+            <p className="text-sm font-medium text-grafite">{r.question}</p>
+            <p className="mt-2 whitespace-pre-wrap text-sm text-grafite-2">{r.content}</p>
+            <div className="mt-2 flex flex-wrap items-center justify-between gap-2 text-xs text-grafite-3">
               <span>{formatDate(r.created_at)} · {(r.sources ?? []).map((x: any) => x.label).join(" · ")}</span>
               {r.status === "blocked" ? <Badge tone="amber">Fora do escopo</Badge> : r.status === "shown" ? (
                 <form action={advisorFeedback} className="flex gap-2">
                   <input type="hidden" name="id" value={r.id} />
-                  <button name="status" value="accepted" className="text-brand">Útil</button>
-                  <button name="status" value="rejected" className="text-slate-500">Não ajudou</button>
+                  <button name="status" value="accepted" className="text-tinta">Útil</button>
+                  <button name="status" value="rejected" className="text-grafite-3">Não ajudou</button>
                 </form>
               ) : <Badge tone={r.status === "accepted" ? "green" : "slate"}>{r.status === "accepted" ? "Útil" : "Não ajudou"}</Badge>}
             </div>

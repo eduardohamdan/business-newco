@@ -31,10 +31,10 @@ export default async function Interno() {
       <PageTitle title="Operação interna" subtitle={`${rows.length} empresas · ${users} usuários`} />
       <Card>
         <table className="w-full text-sm">
-          <thead><tr className="text-left text-slate-500"><th>Empresa</th><th>Estágio</th><th>Ciclo</th><th>Rituais (resp./env.)</th><th>IA no mês</th></tr></thead>
+          <thead><tr className="text-left text-grafite-3"><th>Empresa</th><th>Estágio</th><th>Ciclo</th><th>Rituais (resp./env.)</th><th>IA no mês</th></tr></thead>
           <tbody>
             {rows.map((r) => (
-              <tr key={r.id} className="border-t border-slate-100">
+              <tr key={r.id} className="border-t border-pauta">
                 <td className="py-1.5">{r.name}</td><td>{STAGE_LABEL[r.stage ?? ""] ?? "—"}</td><td>{r.cycle ? "Ativo" : "—"}</td>
                 <td>{r.rituals ? `${r.rituals.answered}/${r.rituals.sent}` : "—"}</td><td>R$ {(r.cost / 100).toFixed(2)}</td>
               </tr>

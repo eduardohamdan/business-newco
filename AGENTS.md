@@ -91,7 +91,21 @@ jornada ponta a ponta (`packages/services/test/flow.test.ts`).
 Siga `docs/plano-de-construcao.md`. Ele lista, com honestidade, o que está pronto, o que está parcial e o que falta
 para produção (o que é Fase 2 no PRD fica para depois do MVP).
 
-## 7. Convenções
+## 7. Interface e identidade visual
+
+A referência visual é `docs/design/interface-ideal.html` (abra no navegador; a aba Identidade tem paleta, tipografia,
+componentes, voz e tokens). Os tokens já estão em `apps/web/app/globals.css`.
+
+- Use só as cores do tema (`tinta`, `grafite`, `pauta`, `papel`, `folha`, `marca-texto`, `ritmo`, `atencao`, `atraso`).
+  Não use a paleta padrão do Tailwind (`slate-*`, `emerald-*`, `red-*` etc.).
+- **Marca-texto (`.marca-texto`) aparece uma vez por tela**, só na próxima ação. Vermelho só para o que venceu ou é crítico.
+- Prioridades e listas são linhas com divisores (pauta), não pilhas de cartões iguais.
+- Texto em caixa de frase, sem rótulos em caixa alta; botões dizem exatamente o que acontece.
+- Contraste mínimo AA (as cores do tema já passam; não clareie textos de apoio).
+- Fonte: Schibsted Grotesk, servida pelo próprio app (`@fontsource-variable/schibsted-grotesk`), sem chamada ao Google.
+- O nome da marca fica em `apps/web/lib/brand.ts`; não espalhe o nome pelo código.
+
+## 8. Convenções
 
 - TypeScript estrito, ESM, sem build dos packages (o Next transpila; o worker usa `tsx`).
 - Nomes de domínio em português no produto e nos textos; código e identificadores em inglês ou português, como já estão.

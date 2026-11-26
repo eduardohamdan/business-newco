@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 import { switchOrg } from "./actions";
+import { Logo } from "@/components/Logo";
 
 const NAV = [
   { href: "/app", label: "Cockpit" },
@@ -20,33 +21,33 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   const org = s.orgs.find((o) => o.id === s.orgId);
   return (
     <div className="min-h-screen">
-      <header className="no-print sticky top-0 z-10 border-b border-slate-200 bg-white/95 backdrop-blur">
+      <header className="no-print sticky top-0 z-10 border-b border-pauta bg-folha/95 backdrop-blur">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3">
-          <Link href="/app" className="font-bold text-navy">
-            Evolution<span className="text-brand">OS</span>
+          <Link href="/app" aria-label="Ir para o Cockpit">
+            <Logo />
           </Link>
           <div className="flex items-center gap-2 text-sm">
             {s.orgs.length > 1 ? (
               <form action={switchOrg} className="flex items-center gap-1">
-                <select name="orgId" defaultValue={s.orgId ?? ""} className="rounded-lg border border-slate-300 px-2 py-1 text-sm">
+                <select name="orgId" defaultValue={s.orgId ?? ""} className="rounded-lg border border-pauta-forte px-2 py-1 text-sm">
                   {s.orgs.map((o) => (
                     <option key={o.id} value={o.id}>{o.trade_name}</option>
                   ))}
                 </select>
-                <button className="rounded-lg px-2 py-1 text-brand">Trocar</button>
+                <button className="rounded-lg px-2 py-1 text-tinta">Trocar</button>
               </form>
             ) : (
-              <span className="max-w-[12rem] truncate text-slate-600">{org?.trade_name ?? "Sem empresa"}</span>
+              <span className="max-w-[12rem] truncate text-grafite-2">{org?.trade_name ?? "Sem empresa"}</span>
             )}
             <form action="/sair" method="post">
-              <button className="rounded-lg px-2 py-1 text-slate-500 hover:text-slate-800">Sair</button>
+              <button className="rounded-lg px-2 py-1 text-grafite-3 hover:text-grafite">Sair</button>
             </form>
           </div>
         </div>
         {s.orgId && (
           <nav className="mx-auto flex max-w-5xl gap-1 overflow-x-auto px-2 pb-2 text-sm">
             {NAV.map((n) => (
-              <Link key={n.href} href={n.href} className="whitespace-nowrap rounded-lg px-3 py-1.5 text-slate-600 hover:bg-slate-100 hover:text-navy">
+              <Link key={n.href} href={n.href} className="whitespace-nowrap rounded-lg px-3 py-1.5 text-grafite-2 hover:bg-pauta/60 hover:text-grafite">
                 {n.label}
               </Link>
             ))}

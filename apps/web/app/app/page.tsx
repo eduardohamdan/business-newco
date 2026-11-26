@@ -66,13 +66,13 @@ export default async function Cockpit() {
         </div>
       )}
       {next && (
-        <Card title="Próxima ação" className="mb-4 border-brand">
-          <p className="text-lg font-medium text-navy">{next.title}</p>
-          <p className="mt-1 text-sm text-slate-500">Semana {next.week} · {cycle.priorities.find((p) => p.id === next.priorityId)?.title}</p>
+        <Card title="A única coisa para esta semana" className="mb-4">
+          <p className="text-xl font-bold leading-snug text-grafite"><mark className="marca-texto">{next.title}</mark></p>
+          <p className="mt-1 text-sm text-grafite-3">Semana {next.week} · {cycle.priorities.find((p) => p.id === next.priorityId)?.title}</p>
           <form action={setActionStatusAction} className="mt-3 flex gap-2">
             <input type="hidden" name="actionId" value={next.id} />
-            <button name="status" value="done" className="rounded-xl bg-brand px-4 py-2 text-sm font-semibold text-white">Feito</button>
-            <button name="status" value="doing" className="rounded-xl px-4 py-2 text-sm font-semibold text-navy ring-1 ring-slate-300">Comecei</button>
+            <button name="status" value="done" className="rounded-xl bg-tinta px-4 py-2 text-sm font-semibold text-white">Feito</button>
+            <button name="status" value="doing" className="rounded-xl px-4 py-2 text-sm font-semibold text-grafite ring-1 ring-pauta-forte">Comecei</button>
           </form>
         </Card>
       )}
@@ -85,27 +85,27 @@ export default async function Cockpit() {
           return (
             <Card key={p.id} title={<span>{p.position}. {p.title}</span>} actions={<Badge tone={risk.tone}>{risk.text}</Badge>}>
               <Progress value={(done / Math.max(1, p.actions.length)) * 100} tone={risk.tone === "green" ? "brand" : risk.tone} />
-              <p className="mt-1 text-xs text-slate-500">{done} de {p.actions.length} ações</p>
+              <p className="mt-1 text-xs text-grafite-3">{done} de {p.actions.length} ações</p>
               <dl className="mt-3 grid grid-cols-3 gap-2 text-center text-xs">
-                <div><dt className="text-slate-500">Início</dt><dd className="font-semibold">{formatMetric(p.metric_code, p.baseline)}</dd></div>
-                <div><dt className="text-slate-500">Agora</dt><dd className="font-semibold">{formatMetric(p.metric_code, last)}</dd></div>
-                <div><dt className="text-slate-500">Meta</dt><dd className="font-semibold text-brand">{formatMetric(p.metric_code, p.target)}</dd></div>
+                <div><dt className="text-grafite-3">Início</dt><dd className="font-semibold">{formatMetric(p.metric_code, p.baseline)}</dd></div>
+                <div><dt className="text-grafite-3">Agora</dt><dd className="font-semibold">{formatMetric(p.metric_code, last)}</dd></div>
+                <div><dt className="text-grafite-3">Meta</dt><dd className="font-semibold text-tinta">{formatMetric(p.metric_code, p.target)}</dd></div>
               </dl>
               <Why items={(p.rationale?.reasons ?? []).map((x: string) => `Sinal: ${x}`).concat(p.rationale?.tip ? [`Dica: ${p.rationale.tip}`] : [])} />
             </Card>
           );
         })}
       </div>
-      <Card title="Caixa" className="mt-4" actions={<a href="/app/raio-x" className="text-sm text-brand">Ver Raio-X</a>}>
+      <Card title="Caixa" className="mt-4" actions={<a href="/app/raio-x" className="text-sm text-tinta">Ver Raio-X</a>}>
         <div className="grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
           {["folego_caixa_dias", "faturamento_mensal", "despesas_pessoais_pj_pct", "meses_caixa_negativo"].map((k) => (
             <div key={k}>
-              <div className="text-slate-500">{getMetric(k).name}</div>
-              <div className="text-lg font-semibold text-navy">{formatMetric(k, metrics[k]?.value)}</div>
+              <div className="text-grafite-3">{getMetric(k).name}</div>
+              <div className="text-lg font-semibold text-grafite">{formatMetric(k, metrics[k]?.value)}</div>
             </div>
           ))}
         </div>
-        <p className="mt-2 text-xs text-slate-500">Período do extrato: {formatDate(rx.period_start)} a {formatDate(rx.period_end)}</p>
+        <p className="mt-2 text-xs text-grafite-3">Período do extrato: {formatDate(rx.period_start)} a {formatDate(rx.period_end)}</p>
       </Card>
     </>
   );
