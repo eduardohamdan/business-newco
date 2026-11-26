@@ -1,4 +1,4 @@
-# Business Evolution OS — MVP
+# Tento (Business Evolution OS) — MVP
 
 Sistema de evolução empresarial com IA para **micro e pequenas empresas brasileiras** (faturamento até R$ 10 milhões/ano).
 
@@ -12,6 +12,7 @@ Painel de Desempenho, achados) → **até 3 prioridades** viram **trilhas** com 
 - Regras para quem for programar (pessoas ou agentes): [`AGENTS.md`](AGENTS.md)
 - Arquitetura: [`docs/arquitetura.md`](docs/arquitetura.md)
 - Interface e identidade visual (protótipo navegável): [`docs/design/interface-ideal.html`](docs/design/interface-ideal.html)
+- Prompt de construção para o Manus: [`docs/prompt-manus.md`](docs/prompt-manus.md)
 - O que está pronto e o que falta: [`docs/plano-de-construcao.md`](docs/plano-de-construcao.md)
 
 ## Rodando localmente

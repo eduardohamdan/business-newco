@@ -53,7 +53,7 @@ implementados e cobertos parcialmente (falta teste de UI).
 | P2.7 | Fallback de PDF por IA | Para layouts não reconhecidos: extração estruturada via `extract_statement`, sempre conferida pela conciliação. |
 | P2.8 | Upgrade de faixa | Quando o faturamento do Raio-X indicar outra faixa, sugerir troca de plano. |
 | P2.9 | Layout do protótipo de interface | Tokens, fonte, logo e marca-texto na próxima ação já aplicados. Falta levar o layout de `docs/design/interface-ideal.html` para as telas: faixa das 12 semanas no Cockpit, prioridades como linhas com régua início/agora/meta, achados do Raio-X em três colunas, escada de estágios no Diagnóstico. |
-| P2.10 | Nome da marca | "Compasso" é nome de trabalho. Antes de trocar (`apps/web/lib/brand.ts` e `public/manifest.webmanifest`): busca no INPI (classes 9, 35, 42), domínio .com.br e @ nas redes. |
+| P2.10 | Nome da marca | "Tento" é o nome provisório, já aplicado em `apps/web/lib/brand.ts` e `public/manifest.webmanifest`. Pendente: busca no INPI (classes 9, 35, 42), análise de conflito com as marcas da 3tentos, domínio (tento.com.br está registrado por terceiro; tento.app.br e tento.ia.br estavam livres em 26/11/2026) e @ nas redes. Pode mudar: nunca escreva o nome fora de `brand.ts`. |
 
 ## 4. Fase 2 do PRD (não começar antes do gate da Fase 1)
 

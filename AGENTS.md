@@ -103,7 +103,8 @@ componentes, voz e tokens). Os tokens já estão em `apps/web/app/globals.css`.
 - Texto em caixa de frase, sem rótulos em caixa alta; botões dizem exatamente o que acontece.
 - Contraste mínimo AA (as cores do tema já passam; não clareie textos de apoio).
 - Fonte: Schibsted Grotesk, servida pelo próprio app (`@fontsource-variable/schibsted-grotesk`), sem chamada ao Google.
-- O nome da marca fica em `apps/web/lib/brand.ts`; não espalhe o nome pelo código.
+- A marca provisória é **Tento** e fica só em `apps/web/lib/brand.ts` (e no manifest). Na UI, use `BRAND.name`; nunca
+  escreva "Tento" direto em componentes, porque o nome ainda pode mudar. "Business Evolution OS" é o nome interno do projeto.
 
 ## 8. Convenções
 

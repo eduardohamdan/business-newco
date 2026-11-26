@@ -4,6 +4,7 @@
  * só validação de entrada e chamada aos serviços (@beos/services).
  */
 import { revalidatePath } from "next/cache";
+import { BRAND } from "@/lib/brand";
 import { redirect, unstable_rethrow } from "next/navigation";
 import { checkEligibility, isValidCnpj, normalizeCnpj, type RevenueBand } from "@beos/core";
 import { emailFromEnv, toE164BR } from "@beos/channels";
@@ -271,7 +272,7 @@ export async function inviteMember(form: FormData) {
   await emailFromEnv().send({
     to: email,
     subject: `${s.user.name ?? s.user.email} convidou você para o plano da ${org.trade_name}`,
-    text: `Você foi adicionado à ${org.trade_name} no Business Evolution OS. Entre com este e-mail em ${process.env.APP_URL ?? "http://localhost:3000"}/entrar (sem senha: enviamos um código).`,
+    text: `Você foi adicionado à ${org.trade_name} no ${BRAND.name}. Entre com este e-mail em ${process.env.APP_URL ?? "http://localhost:3000"}/entrar (sem senha: enviamos um código).`,
   });
   back("/app/configuracoes", { ok: `${email} foi adicionado. A pessoa entra com o próprio e-mail.` });
 }
